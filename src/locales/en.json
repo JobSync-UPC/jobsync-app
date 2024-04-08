@@ -1,0 +1,197 @@
+{
+  "general": {
+    "go-back-btn-label": "Go back",
+    "hello": "Hello"
+  },
+  "navbar": {
+    "home": "Home",
+    "applications": "Applications",
+    "recruitments": "Recruitments",
+    "organization": "Organization",
+    "settings": "Settings",
+    "switch-team": "Switch Team",
+    "create-organization" : "Create organization",
+    "login": "Sign In",
+    "sign-up": "Register",
+    "user": "User"
+  },
+  "auth": {
+    "candidate": "Candidate",
+    "recruiter": "Recruiter",
+    "first-name": "First Name",
+    "last-name": "Last Name",
+    "sign-title": "Sign In",
+    "sign-up-title": "Register",
+    "e-mail": "E-mail",
+    "password": "Password",
+    "confirm-password": "Confirm Password",
+    "new-password": "New Password",
+    "confirm-new-password": "Confirm New Password",
+    "change-password": "Change password",
+    "country": "Country",
+    "phone-number": "Phone Number",
+    "select-country": "Select a Country",
+    "subscribe-newsletter": "I want to receive news from JobSync via email.",
+    "agree-privacy-policy": "I have read and agree to the",
+    "privacy-policy": "Privacy Policy",
+    "save-changes": "Save changes",
+    "login": "Sign In",
+    "forgot-password": "Forgot Password?",
+    "account-question": "No account?",
+    "have-account-question": "Already have an account? ",
+    "sign-up": "Register",
+    "password-recovery": {
+      "title": "Password Recovery",
+      "enter-new-password": "Enter new password",
+      "go-back": "Go back to",
+      "change-password": "Change Password"
+    },
+    "password-forgot": {
+      "title": "Forgot Password",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "send-link": "Send Link",
+      "go-back": "Go back to"
+    },
+    "logout": "Logout",
+    "change-profile-picture": "Change profile picture (URL)",
+    "save-chages": "Save changes",
+    "edit-profile": "Edit profile"
+  },
+  "greeting": {
+    "morning-greeting": "Good Morning, ",
+    "start-greeting": "Let's Start!"
+  },
+  "create-org": {
+    "title": "Create an organization",
+    "choose-picture": "Choose a picture",
+    "company-name": "Company Name",
+    "choose-plan": "Choose a plan",
+    "company-email": "Company Email",
+    "country": "Country",
+    "select-country": "Select a Country",
+    "phone-number": "Phone Number",
+    "company-address": "Company Address",
+    "address-placeholder": "Street Address, City",
+    "add-members-msg": "Once you create the organization, you can add members and set up administrators",
+    "create-organization": "Create organization"
+  },
+  "organization-profile": {
+    "new-recruitment-btn-label": "Create Recruitment",
+    "past-recruitment-btn-label": "Recruitments History",
+    "past-candidates-btn-label": "Candidates History",
+    "organization-settings-label": "Organization Settings",
+    "members-table": {
+        "members-title": "Organization members",
+        "name-header": "Member",
+        "avatar-header": "Profile Picture",
+        "role-header": "Role",
+        "phone-header": "Phone Number"
+    }
+  },
+  "organization-settings": {
+    "title": "Organization Settings",
+    "change-picture": "Change Picture",
+    "current-plan": "Current Plan",
+    "change-plan": "Change Plan",
+    "add-members": "Add Members",
+    "company-admin": "Company Admin",
+    "company-email": "Company Email",
+    "country": "Country",
+    "company-phone": "Company Phone Number",
+    "company-address": "Company Address",
+    "save-changes": "Save changes",
+    "return": "Return",
+    "plan-options": "Choose a plan",
+    "accept": "Accept"
+  },
+  "recruitment-card": {
+    "start-date-label": "Start Date",
+    "recruitment-status-label": "Status",
+    "job-post-status-label": "Job Post Status",
+    "organizer-label": "Organizer"
+  },
+  "recruitment": {
+    "create-recruitment": {
+      "title": "New recruitment process",
+      "title-placeholder": "Title",
+      "description-placeholder": "Description (Optional)",
+      "starting-date-lbl": "Starting date",
+      "ending-date-lbl": "Ending date",
+      "create-submit-lbl": "Create"
+    },
+    "create-phase": {
+      "title": "New phase",
+      "title-placeholder": "Title",
+      "description-placeholder": "Description (Optional)",
+      "create-submit-lbl": "Create"
+    },
+    "dashboard": {
+      "add-phase-lbl": "Add phase",
+      "add-candidates-lbl": "Add candidates",
+      "recruitment-settings-lbl": "Settings",
+      "candidates-counter": " Candidates",
+      "phases-counter": " Phases",
+      "candidates-table": {
+        "phases-header": "Recruitment phases",
+        "phase-lbl": "Phase",
+        "description-lbl": "Description",
+        "candidates-lbl": "Candidates",
+        "files-lbl": "Files",
+        "see-lbl": "View",
+        "name-lbl": "Candidate",
+        "email-lbl": "Email",
+        "phone-lbl": "Phone"
+      }
+    },
+    "no-recruitments-found-message": "No recruitments found",
+    "no-candidates-found-message": "No candidates"
+  },
+  "activities": {
+    "schedule-title": "Today's Schedule"
+  },
+  "settings": {
+    "title": "Settings",
+    "app-btn-label": "App Settings",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "profile-settings": {
+    "title": "Profile Settings",
+    "change-pp": "Change profile picture"
+  },
+  "app-settings": {
+    "title": "App Settings",
+    "lang-switcher-label": "Choose your preferred language:",
+    "theme-switcher-label": "Select an app theme:"
+  },
+  "plans": {
+    "free": "Free",
+    "free-feature-1": "All the features of the platform.",
+    "free-feature-2": "Limited number of recruiters.",
+    "free-feature-3": "Limited number of candidates.",
+    "premium": "Premium",
+    "premium-feature-1": "All the features of the platform.",
+    "premium-feature-2": "Unlimited number of recruiters.",
+    "premium-feature-3": "Unlimited number of candidates.",
+    "premium-feature-4": "Priority customer support 24/7."
+  },
+  "page-not-found": {
+    "main-image-alt": "A drawing of magnifying glass",
+    "exclamation": "Oops!",
+    "message": "You didn't break the internet, but we can't find what you are looking for.",
+    "doesnt-exist": "doesn't exist",
+    "go-back-to-home": "Go back to Home"
+  },
+  "link": {
+    "terms-of-service": "https://jobsync.netlify.app/terms-of-service/"
+  },
+  "applications": {
+    "application": "Application",
+    "application-date": "Application date",
+    "current-phase": "Current phase",
+    "status": "Status",
+    "actions": "Actions"
+  }
+}

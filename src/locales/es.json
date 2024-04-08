@@ -1,0 +1,195 @@
+{
+  "general": {
+    "go-back-btn-label": "Volver atrás",
+    "hello": "Hola"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "applications": "Postulaciones",
+    "recruitments": "Reclutamientos",
+    "organization": "Organización",
+    "settings": "Configuración",
+    "switch-team": "Cambiar Equipo",
+    "create-organization" : "Crear organización",
+    "login": "Iniciar Sesión",
+    "sign-up": "Registrarse",
+    "user": "Usuario"
+  },
+  "auth": {
+    "candidate": "Candidato",
+    "recruiter": "Reclutador",
+    "first-name": "Nombre",
+    "last-name": "Apellido",
+    "sign-title": "Inicio de sesión",
+    "sign-up-title": "Registro",
+    "e-mail": "Correo",
+    "password": "Contraseña",
+    "confirm-password": "Confirmar Contraseña",
+    "new-password": "Nueva Contraseña",
+    "confirm-new-password": "Confirmar Nueva Contraseña",
+    "change-password": "Cambiar contraseña",
+    "country": "País",
+    "phone-number": "Número de teléfono",
+    "select-country": "Selecciona un País",
+    "subscribe-newsletter": "Quiero suscribirme a las noticias de JobSync por email.",
+    "agree-privacy-policy": "He leído y acepto las",
+    "privacy-policy": "Políticas de Privacidad",
+    "save-changes": "Guardar cambios",
+    "login": "Inicio de sesión",
+    "forgot-password": "¿Te olvidaste la contraseña?",
+    "account-question": "¿Aún no tienes cuenta?",
+    "have-account-question": "¿Ya tienes una cuenta? ",
+    "sign-up": "Registrarme",
+    "password-recovery": {
+      "title": "Recuperación de contraseña",
+      "enter-new-password": "Ingresa una nueva contraseña",
+      "go-back": "Volver a",
+      "change-password": "Cambiar contraseña"
+    },
+    "password-forgot":{
+      "title": "¿Olvidaste tu contraseña?",
+      "description": "No te preocupes, ingresa tu email y te enviaremos un link para que puedas recuperarla",
+      "send-link": "Enviar link de recuperación",
+      "go-back": "Volver a"
+    },
+    "logout": "Cerrar sesión",
+    "change-profile-picture": "Cambiar foto de perfil (URL)",
+    "save-chages": "Guardar cambios",
+    "edit-profile": "Editar perfil"
+  },
+  "greeting": {
+    "morning-greeting": "Buenos días, ",
+    "start-greeting": "¡Empecemos!"
+  },
+  "create-org": {
+    "title": "Crea una organización",
+    "choose-picture": "Elige una imagen",
+    "company-name": "Nombre de la compañía",
+    "choose-plan": "Elige un plan",
+    "company-email": "Correo de la compañía",
+    "country": "País",
+    "select-country": "Selecciona un país",
+    "phone-number": "Número celular de contacto",
+    "company-address": "Dirección de la compañía",
+    "address-placeholder": "Calle, Ciudad",
+    "add-members-msg": "Una vez cree la organización, podrá agregar miembros y configurar los administradores",
+    "create-organization": "Crear organización"
+  },
+  "organization-profile": {
+    "new-recruitment-btn-label": "Crear Reclutamiento",
+    "past-recruitment-btn-label": "Historial de Reclutamientos",
+    "past-candidates-btn-label": "Historial de Candidatos",
+    "organization-settings-label": "Ajustes de organización",
+    "members-table": {
+      "members-title": "Miembros de organización",
+      "name-header": "Miembro",
+      "avatar-header": "Foto de Perfil",
+      "role-header": "Rol"
+    }
+  },
+  "organization-settings": {
+    "change-picture": "Cambiar foto",
+    "current-plan": "Plan actual",
+    "change-plan": "Cambiar plan",
+    "add-members": "Agregar miembros",
+    "company-admin": "Administrador de la compañía",
+    "company-email": "Correo de la compañía",
+    "country": "País",
+    "company-phone": "Teléfono de la compañía",
+    "company-address": "Dirección de la compañía",
+    "save-changes": "Guardar cambios",
+    "return": "Regresar",
+    "plan-options": "Elige un plan",
+    "accept": "Aceptar"
+  },
+  "recruitment-card": {
+    "start-date-label": "Fecha de Inicio",
+    "recruitment-status-label": "Estado de Reclutamiento",
+    "job-post-status-label": "Estado de Publicación de Oferta",
+    "organizer-label": "Organizador"
+  },
+  "recruitment": {
+    "create-recruitment": {
+      "title": "Nuevo proceso de reclutamiento",
+      "title-placeholder": "Título",
+      "description-placeholder": "Descripción (Opcional)",
+      "starting-date-lbl": "Fecha de inicio",
+      "ending-date-lbl": "Fecha de fin",
+      "create-submit-lbl": "Crear"
+    },
+    "create-phase": {
+      "title": "Nueva fase de reclutamiento",
+      "title-placeholder": "Título",
+      "description-placeholder": "Descripción (Opcional)",
+      "create-submit-lbl": "Crear"
+    },
+    "dashboard": {
+      "add-phase-lbl": "Agregar fase",
+      "add-candidates-lbl": "Agregar candidatos",
+      "recruitment-settings-lbl": "Configuración",
+      "candidates-counter": " Candidatos",
+      "phases-counter": " Etapas",
+      "candidates-table": {
+        "phases-header": "Fases de reclutamiento",
+        "phase-lbl": "Fase",
+        "description-lbl": "Descripción",
+        "candidates-lbl": "Candidatos",
+        "files-lbl": "Archivos",
+        "see-lbl": "Ver",
+        "name-lbl": "Candidato",
+        "email-lbl": "Email",
+        "phone-lbl": "Contacto"
+      }
+    },
+    "no-recruitments-found-message": "No se encontraron procesos de reclutamiento",
+    "no-candidates-found-message": "No se encontraron candidatos"
+  },
+  "activities": {
+    "schedule-title": "Tareas de hoy"
+  },
+  "settings": {
+    "profile-btn-label": "Configurar perfil",
+    "app-btn-label": "Configurar aplicación",
+    "theme": {
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
+  "profile-settings": {
+    "title": "Configuración del Perfil",
+    "change-pp": "Cambiar foto de perfil"
+  },
+  "app-settings": {
+    "title": "Configuración de la Aplicación",
+    "lang-switcher-label": "Elige tu idioma preferido:",
+    "theme-switcher-label": "Selecciona un tema para la aplicación:"
+  },
+  "plans": {
+    "free": "Free",
+    "free-feature-1": "Todas las funcionalidades de la plataforma.",
+    "free-feature-2": "Número limitado de reclutadores.",
+    "free-feature-3": "Número limitado de candidatos.",
+    "premium": "Premium",
+    "premium-feature-1": "Todas las funcionalidades de la plataforma.",
+    "premium-feature-2": "Número ilimitado de reclutadores",
+    "premium-feature-3": "Número ilimitado de candidatos.",
+    "premium-feature-4": "Soporte 24/7."
+  },
+  "page-not-found": {
+    "main-image-alt": "Un dibujo de una lupa",
+    "exclamation": "¡Vaya!",
+    "message": "No rompiste el internet, pero no podemos encontrar lo que estás buscando.",
+    "doesnt-exist": "no existe",
+    "go-back-to-home": "Volver al Inicio"
+  },
+  "link": {
+    "terms-of-service": "https://jobsync.netlify.app/es/terminos-de-servicio/"
+  },
+  "applications": {
+    "application": "Postulación",
+    "application-date": "Fecha de postulación",
+    "current-phase": "Fase actual",
+    "status": "Estado",
+    "actions": "Acciones"
+  }
+}
