@@ -148,6 +148,7 @@
     "schedule-title": "Tareas de hoy"
   },
   "settings": {
+    "title": "Configuración",
     "profile-btn-label": "Configurar perfil",
     "app-btn-label": "Configurar aplicación",
     "theme": {
@@ -157,7 +158,12 @@
   },
   "profile-settings": {
     "title": "Configuración del Perfil",
-    "change-pp": "Cambiar foto de perfil"
+    "change-pp": "Cambiar foto de perfil",
+    "change-linkedin-url": "URL de LinkedIn",
+    "change-cv-url": "URL de Resumen o CV",
+    "change-portoflio-url": "URL de portafolio",
+    "applicant-title": "Perfil profesional",
+    "discard-changes": "Descartar cambios"
   },
   "app-settings": {
     "title": "Configuración de la Aplicación",

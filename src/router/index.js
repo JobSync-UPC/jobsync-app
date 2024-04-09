@@ -24,18 +24,13 @@ const router = createRouter({
       // User profile edit and settings
       { path: '/manage-profile', name: 'User-Profile', component: ProfileManagement, meta: { requiresAuth: true } },
       { path: '/settings', name: 'Settings', component: SettingsComponent, meta: { requiresAuth: true } },
+
       // Applicants
       { path: '/jobs', name: 'Job posts', component: JobsPostsPage, meta: { requiresAuth: true, requiresCandidate: true } },
       { path: '/profile', name: 'Applicant Profile', component: ApplicatProfilePage, meta: { requiresAuth: true, requiresCandidate: true } },
-
-
-      // Applications
       { path: '/applications', name: 'Candidate Applications', component:ApplicationsPage , meta: { requiresAuth: true, requiresCandidate: true } },
 
-      // Organizations
-
-
-      // Recruitments
+      // Recruiters
 
 
       // Support
@@ -45,12 +40,25 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore();
-  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    next('/login');
-  } else {
+    const userStore = useUserStore();
+
+    // if user is not auth and wants to access auth required route, redirect to sign in
+    if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+        next('/login');
+    // if user is auth and wants to access auth required route, redirect to home
+    } else if (!to.meta.requiresAuth && userStore.isAuthenticated) {
+        next('/');
+    }
+    // if user is trying to access the root path, redirect based on role
+    else if (to.path === '/home') {
+        if (userStore.role === 'ROLE_APPLICANT') {
+            next('/jobs');
+        }
+        else {
+            next('/home');
+        }
+    }
     next();
-  }
 })
 
 export default router;
