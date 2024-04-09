@@ -159,7 +159,12 @@
   },
   "profile-settings": {
     "title": "Profile Settings",
-    "change-pp": "Change profile picture"
+    "change-pp": "Change profile picture",
+    "change-linkedin-url": "LinkedIn URL",
+    "change-cv-url": "CV or Resumen URL",
+    "change-portfolio-url": "Portfolio",
+    "applicant-title": "Professional Profile",
+    "discard-changes": "Discard changes"
   },
   "app-settings": {
     "title": "App Settings",

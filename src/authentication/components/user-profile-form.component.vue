@@ -158,9 +158,6 @@ export default {
             this.countries.push("Error loading countries");
           })
     },
-    setIsApplicant(state) {
-      this.isApplicant = state;
-    },
     saveChanges(event) {
       event.preventDefault();
 

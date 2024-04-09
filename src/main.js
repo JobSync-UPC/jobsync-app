@@ -28,6 +28,8 @@ import Dialog from 'primevue/dialog';
 import Tag from 'primevue/tag';
 import RadioButton from "primevue/radiobutton";
 
+
+
 import {createPinia} from "pinia";
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
@@ -38,11 +40,12 @@ import Avatar from "primevue/avatar";
 const pinia = createPinia();
 
 createApp(App)
-    .use(PrimeVue, { ripple: true })
+    .use(PrimeVue, {ripple: true})
     .use(i18n)
     .use(pinia)
     .use(router)
     .use(ToastService)
+    .component('pv-inputgroup', InputText)
     .component('pv-message', Message)
     .component('pv-file-upload', FileUpload)
     .component('pv-checkbox', Checkbox)
