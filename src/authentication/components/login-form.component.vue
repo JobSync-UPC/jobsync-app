@@ -69,6 +69,7 @@ export default {
             life: 2000
           });
           this.setUser(res.data);
+          location.reload();
           this.$router.push("/home")
         })
         .catch(err => this.$toast.add({

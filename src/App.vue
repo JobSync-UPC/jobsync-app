@@ -8,26 +8,28 @@
         </router-link>
         <div class="hidden md:flex">
           <div v-if="this.user && this.user.role === 'ROLE_APPLICANT'" class="flex flex-col md:flex-row">
-            <pv-button label="Jobs" text plain
+            <pv-button :label="$t('navbar.jobs')" text plain
                        @click="this.$router.push('/jobs')"
                        class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
             />
-            <pv-button label="Applications" text plain
+            <pv-button :label="$t('navbar.applications')" text plain
                        @click="this.$router.push('/applications')"
                        class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
             />
-            <pv-button label="Profile" text plain
+            <pv-button :label="$t('navbar.profile')" text plain
                        @click="this.$router.push('/profile')"
             />
           </div>
           <div v-else-if="this.user && this.user.role === 'ROLE_RECRUITER'" class="flex flex-col md:flex-row">
-            <pv-button label="Recruitments" text plain
-                       @click="this.$router.push('/recruitments')"
-                       class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
-            />
-            <pv-button label="Company" text plain
-                       @click="this.$router.push('/company-profile')"
-            />
+            <div v-if="this.user.company">
+              <pv-button :label="$t('navbar.recruitments')" text plain
+                         @click="this.$router.push('/recruitments')"
+                         class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
+              />
+              <pv-button :label="$t('navbar.company')" text plain
+                         @click="this.$router.push('/company-profile')"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -70,6 +72,30 @@
           :label="$t('auth.logout')" text plain
           @click="logout"
       />
+    </div>
+  </pv-dialog>
+
+  <pv-dialog v-model:visible="visibleMobileBar"
+             position="topright" :modal="true" :draggable="false">
+    <div v-if="this.user && this.user.role === 'ROLE_APPLICANT'" class="grid">
+      <pv-button :label="$t('navbar.jobs')" text plain
+                 @click="this.$router.push('/jobs')"
+      />
+      <pv-button :label="$t('navbar.applications')" text plain
+                 @click="this.$router.push('/applications')"
+      />
+      <pv-button :label="$t('navbar.profile')" text plain
+      />
+    </div>
+    <div v-else-if="this.user && this.user.role === 'ROLE_RECRUITER'" class="grid">
+      <div v-if="this.user.company">
+        <pv-button :label="$t('navbar.recruitments')" text plain
+                   @click="this.$router.push('/recruitments')"
+        />
+        <pv-button :label="$t('navbar.company')" text plain
+                   @click="this.$router.push('/company-profile')"
+        />
+      </div>
     </div>
   </pv-dialog>
 </template>
