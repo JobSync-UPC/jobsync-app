@@ -4,17 +4,17 @@
       <div>
         <h1 class="text-center font-bold text-3xl">{{ $t('profile-settings.applicant-title') }}</h1>
       </div>
-      <div class="grid">
-        <h1 class="text-center font-bold text-3xl">{{this.user.firstname + " " + this.user.lastname}}</h1>
-        <p class="text-center text-xl">{{this.user.email}}</p>
+      <div class="grid" v-if="this.applicant">
+        <h1 class="text-center font-bold text-3xl">{{this.applicant.firstname + " " + this.applicant.lastname}}</h1>
+        <p class="text-center text-xl">{{this.applicant.email}}</p>
       </div>
       <form v-on:submit="saveChanges($event)" class="flex flex-col space-y-3">
         <div>
-          <label for="cvResumeUrl">{{ $t('profile-settings.change-cv-url') }}</label>
+          <label for="cvUrl">{{ $t('profile-settings.change-cv-url') }}</label>
           <pv-input
               id="cvResumeUrl"
               class="w-full"
-              v-model="cvResumeUrl"
+              v-model="cvUrl"
               placeholder="URL"
               type="text"
           />
@@ -24,7 +24,7 @@
           <pv-input
               id="linkedinUrl"
               class="w-full"
-              v-model="linkedinUrl"
+              v-model="linkedInUrl"
               placeholder="URL"
               type="text"
           />
@@ -39,8 +39,8 @@
               type="text"
           />
         </div>
-        <pv-button type="submit" outlined :label="$t('auth.save-changes')" />
-        <pv-button type="submit" severity="danger" :label="$t('profile-settings.discard-changes')" />
+        <pv-button type="submit" @click="saveChanges" outlined :label="$t('auth.save-changes')" />
+        <pv-button @click="cancelChanges" severity="danger" :label="$t('profile-settings.discard-changes')" />
       </form>
     </div>
   </div>
@@ -55,21 +55,21 @@ export default {
   components: {  },
   data(){
     return {
-      cvResumeUrl: '',
-      linkedinUrl: '',
+      cvUrl: '',
+      linkedInUrl: '',
       portfolioUrl: '',
       applicantApi: new ApplicantsService(),
-      user:null,
+      applicant:null,
     }
   },
   created(){
     this.applicantApi.getById(getUser().id).then(
         response => {
-          this.user = response.data;
+          this.applicant = response.data;
 
-          this.cvResumeUrl = this.user.cvResumeUrl;
-          this.linkedinUrl = this.user.linkedinUrl;
-          this.portfolioUrl = this.user.portfolioUrl;
+          this.cvUrl = this.applicant.cvUrl;
+          this.linkedInUrl = this.applicant.linkedInUrl;
+          this.portfolioUrl = this.applicant.portfolioUrl;
         }
     ).catch(e => {
       console.log(e);
@@ -77,17 +77,34 @@ export default {
   },
   methods: {
     saveChanges() {
-      this.applicantApi.updateById(this.user.id, {
-        cvResumeUrl: this.cvResumeUrl,
-        linkedinUrl: this.linkedinUrl,
+      event.preventDefault();
+
+      this.applicantApi.updateById(this.applicant.id, {
+        cvUrl: this.cvUrl,
+        linkedInUrl: this.linkedInUrl,
         portfolioUrl: this.portfolioUrl,
       }).then(
           response => {
-            console.log(response);
+            this.$toast.add({
+              severity: "success",
+              summary: "Success",
+              detail: "Changes saved successfully.",
+              life: 2000
+            });
           }
       ).catch(e => {
-        console.log(e);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: e.data.message,
+          life: 2000
+        });
       });
+    },
+    cancelChanges() {
+      this.cvUrl = this.applicant.cvUrl;
+      this.linkedinUrl = this.applicant.linkedinUrl;
+      this.portfolioUrl = this.applicant.portfolioUrl;
     }
   }
 }
