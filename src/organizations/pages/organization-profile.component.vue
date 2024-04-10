@@ -45,15 +45,11 @@ export default {
     return {
       currentOrganizationId: 1,
       currentOrganization: {},
-      organizationService: new OrganizationApiService(),
+
     }
   },
   created(){
-    this.organizationService.getCurrentOrganization(this.currentOrganizationId)
-        .then(response => this.currentOrganization = response.data)
-        .catch(error => {
-          console.error('An error occurred with organization:', error);
-        });
+
   }
 }
 </script>
