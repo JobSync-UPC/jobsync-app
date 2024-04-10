@@ -38,7 +38,7 @@
               />
             </div>
             <div>
-              <label for="last-name">{{ $t('auth.first-name') }}</label>
+              <label for="last-name">{{ $t('auth.last-name') }}</label>
               <pv-input
                   required
                   id="last-name"
