@@ -64,6 +64,7 @@
     "start-greeting": "Let's Start!"
   },
   "create-org": {
+    "no-org": "You haven't joined a team",
     "title": "Create an organization",
     "choose-picture": "Choose a picture",
     "company-name": "Company Name",
@@ -75,7 +76,8 @@
     "company-address": "Company Address",
     "address-placeholder": "Street Address, City",
     "add-members-msg": "Once you create the organization, you can add members and set up administrators",
-    "create-organization": "Create organization"
+    "create-organization": "Create organization",
+    "get-invited": "Get invited to a company"
   },
   "organization-profile": {
     "new-recruitment-btn-label": "Create Recruitment",
