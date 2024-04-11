@@ -4,7 +4,7 @@
     <template #start>
       <div class="flex items-center gap-2 md:gap-4 lg:gap-6">
         <router-link to="/">
-          <img src="/jobsync-logo.png" alt="JobSync Logo" class="h-6 w-auto md:h-8 md:w-auto lg:h-10 lg:w-auto" />
+          <img src="/jobsync-logo.png" alt="JobSync Logo" class="h-6 w-auto md:w-auto lg:w-auto" />
         </router-link>
         <div class="hidden md:flex">
           <div v-if="this.user && this.user.role === 'ROLE_APPLICANT'" class="flex flex-col md:flex-row">

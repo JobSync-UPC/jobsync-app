@@ -18,6 +18,10 @@ export const useUserStore = defineStore('auth', {
             this.user = data.applicant;
         } else {
           this.user = data.recruiter;
+
+          if (data.recruiter.company) {
+            this.companyId = data.recruiter.company.id;
+          }
         }
     },
     logout() {

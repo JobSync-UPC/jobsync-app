@@ -64,6 +64,7 @@
     "start-greeting": "¡Empecemos!"
   },
   "create-org": {
+    "no-org": "No te has unido a una compañía",
     "title": "Crea una organización",
     "choose-picture": "Elige una imagen",
     "company-name": "Nombre de la compañía",
@@ -75,7 +76,8 @@
     "company-address": "Dirección de la compañía",
     "address-placeholder": "Calle, Ciudad",
     "add-members-msg": "Una vez cree la organización, podrá agregar miembros y configurar los administradores",
-    "create-organization": "Crear organización"
+    "create-organization": "Crear organización",
+    "get-invited": "Espera a ser invitado a una compañía"
   },
   "organization-profile": {
     "new-recruitment-btn-label": "Crear Reclutamiento",

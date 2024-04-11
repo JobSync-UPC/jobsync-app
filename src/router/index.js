@@ -67,8 +67,7 @@ function handleRecruiter(userStore, to, next) {
     else if (to.meta.requiresCompany && !userStore.companyId) {
         next('/init');
     }
-    // If the route does not require a company and the user has a company, redirect to recruitments
-    else if (!to.meta.requiresCompany && userStore.companyId) {
+    else if (to.path === '/init' && userStore.companyId) {
         next('/recruitments');
     }
     // If the user is trying to access the home path, redirect based on whether they have a company
