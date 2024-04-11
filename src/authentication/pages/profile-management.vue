@@ -1,9 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-full">
-    <div class="w-full max-w-xl">
-      <user-profile-form/>
-    </div>
-  </div>
+  <user-profile-form/>
 </template>
 
 <script>

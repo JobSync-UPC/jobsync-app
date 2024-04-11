@@ -7,7 +7,9 @@
     "home": "Inicio",
     "applications": "Postulaciones",
     "recruitments": "Reclutamientos",
-    "organization": "Organización",
+    "company": "Empresa",
+    "jobs": "Trabajos",
+    "profile": "Perfil",
     "settings": "Configuración",
     "switch-team": "Cambiar Equipo",
     "create-organization" : "Crear organización",
@@ -62,6 +64,7 @@
     "start-greeting": "¡Empecemos!"
   },
   "create-org": {
+    "no-org": "No te has unido a una compañía",
     "title": "Crea una organización",
     "choose-picture": "Elige una imagen",
     "company-name": "Nombre de la compañía",
@@ -73,7 +76,8 @@
     "company-address": "Dirección de la compañía",
     "address-placeholder": "Calle, Ciudad",
     "add-members-msg": "Una vez cree la organización, podrá agregar miembros y configurar los administradores",
-    "create-organization": "Crear organización"
+    "create-organization": "Crear organización",
+    "get-invited": "Espera a ser invitado a una compañía"
   },
   "organization-profile": {
     "new-recruitment-btn-label": "Crear Reclutamiento",
@@ -148,6 +152,7 @@
     "schedule-title": "Tareas de hoy"
   },
   "settings": {
+    "title": "Configuración",
     "profile-btn-label": "Configurar perfil",
     "app-btn-label": "Configurar aplicación",
     "theme": {
@@ -157,7 +162,12 @@
   },
   "profile-settings": {
     "title": "Configuración del Perfil",
-    "change-pp": "Cambiar foto de perfil"
+    "change-pp": "Cambiar foto de perfil",
+    "change-linkedin-url": "URL de LinkedIn",
+    "change-cv-url": "URL de Resumen o CV",
+    "change-portfolio-url": "URL de portafolio",
+    "applicant-title": "Perfil profesional",
+    "discard-changes": "Descartar cambios"
   },
   "app-settings": {
     "title": "Configuración de la Aplicación",
