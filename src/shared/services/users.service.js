@@ -24,4 +24,13 @@ export class UsersApiService {
   disableById(id) {
       return http.put(`disable/${id}`);
   }
+  changeProfilePicture(id, file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return http.post(`profile-picture/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
 }

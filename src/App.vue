@@ -30,6 +30,11 @@
                          @click="this.$router.push('/company-profile')"
               />
             </div>
+            <div v-else>
+              <pv-button :label="$t('navbar.create-organization')" text plain
+                         @click="this.$router.push('/company-create')"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -96,6 +101,11 @@
                    @click="this.$router.push('/company-profile')"
         />
       </div>
+      <div v-else>
+        <pv-button :label="$t('navbar.create-organization')" text plain
+                   @click="this.$router.push('/create-company')"
+        />
+      </div>
     </div>
   </pv-dialog>
 </template>
@@ -151,6 +161,10 @@ export default {
   computed: {
     theme() {
       return useThemeStore().theme;
+    },
+    localStorageUser() {
+      const user = localStorage.getItem("user");
+      return user ? JSON.parse(user).user : null;
     }
   },
   watch: {
@@ -158,8 +172,8 @@ export default {
       const store = useThemeStore();
       store.setTheme(newTheme);
     },
-    user(newUserData) {
-      if (newUserData) {
+    localStorageUser(newUserData, oldUserData) {
+      if (newUserData && newUserData !== oldUserData) {
         this.user = newUserData;
       }
     }

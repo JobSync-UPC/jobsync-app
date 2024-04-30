@@ -35,6 +35,7 @@ import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
 import Toolbar from "primevue/toolbar";
 import Avatar from "primevue/avatar";
+import Textarea from "primevue/textarea";
 
 // Pinia
 const pinia = createPinia();
@@ -54,6 +55,7 @@ createApp(App)
     .component('pv-toast', Toast)
     .component('pv-toolbar',Toolbar)
     .component('pv-avatar', Avatar)
+    .component('pv-textarea', Textarea)
     .component('pv-input', InputText)
     .component('pv-button', Button)
     .component('pv-card', Card)

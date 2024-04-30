@@ -9,15 +9,24 @@
         <p class="text-center text-xl">{{this.applicant.email}}</p>
       </div>
       <form v-on:submit="saveChanges($event)" class="flex flex-col space-y-3">
-        <div>
-          <label for="cvUrl">{{ $t('profile-settings.change-cv-url') }}</label>
-          <pv-input
-              id="cvResumeUrl"
-              class="w-full"
-              v-model="cvUrl"
-              placeholder="URL"
-              type="text"
-          />
+        <div class="flex gap-2 items-end">
+          <div class="w-full">
+            <label for="cvUrl">{{ $t('profile-settings.change-cv-url') }}</label>
+            <a :href="cvUrl" target="_blank">
+              <pv-input
+                  id="cvResumeUrl"
+                  class="w-full"
+                  v-model="cvUrl"
+                  placeholder="URL"
+                  type="text"
+                  disabled
+              />
+            </a>
+          </div>
+          <pv-button icon="pi pi-file-export" severity="info" aria-label="User" @click="openCvUrl" />
+          <pv-file-upload mode="basic" name="demo[]" url="/api/upload"
+                          accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                          :maxFileSize="1000000" @select="uploadCVUrl" />
         </div>
         <div>
           <label for="linkedinUrl">{{ $t('profile-settings.change-linkedin-url') }}</label>
@@ -30,9 +39,9 @@
           />
         </div>
         <div>
-          <label for="portfolioUrl">{{ $t('profile-settings.change-portfolio-url') }}</label>
+          <label for="linkedinUrl">{{ $t('profile-settings.change-portfolio-url') }}</label>
           <pv-input
-              id="portfolioUrl"
+              id="cvResumeUrl"
               class="w-full"
               v-model="portfolioUrl"
               placeholder="URL"
@@ -60,6 +69,8 @@ export default {
       portfolioUrl: '',
       applicantApi: new ApplicantsService(),
       applicant:null,
+
+      cvFile: null
     }
   },
   created(){
@@ -79,8 +90,29 @@ export default {
     saveChanges() {
       event.preventDefault();
 
+      if (this.cvFile !== null) {
+        this.applicantApi.changeCV(this.applicant.id, this.cvFile).then(
+            response => {
+              this.cvUrl = response.data.cvUrl
+
+              console.log("CV uploaded successfully");
+
+              this.cvFile= null;
+
+              this.updateApplicant();
+            }
+        ).catch(e => {
+          console.log(e.response);
+          this.cvFile= null;
+          this.updateApplicant();
+        });
+      }
+      else {
+        this.updateApplicant();
+      }
+    },
+    updateApplicant() {
       this.applicantApi.updateById(this.applicant.id, {
-        cvUrl: this.cvUrl,
         linkedInUrl: this.linkedInUrl,
         portfolioUrl: this.portfolioUrl,
       }).then(
@@ -91,6 +123,18 @@ export default {
               detail: "Changes saved successfully.",
               life: 2000
             });
+
+            this.applicantApi.getById(getUser().id).then(
+                response => {
+                  this.applicant = response.data;
+
+                  this.cvUrl = this.applicant.cvUrl;
+                  this.linkedInUrl = this.applicant.linkedInUrl;
+                  this.portfolioUrl = this.applicant.portfolioUrl;
+                }
+            ).catch(e => {
+              console.log(e);
+            });
           }
       ).catch(e => {
         this.$toast.add({
@@ -100,11 +144,35 @@ export default {
           life: 2000
         });
       });
+
+
+      this.applicantApi.getById(getUser().id).then(
+          response => {
+            this.applicant = response.data;
+
+            this.cvUrl = this.applicant.cvUrl;
+            this.linkedInUrl = this.applicant.linkedInUrl;
+            this.portfolioUrl = this.applicant.portfolioUrl;
+          }
+      ).catch(e => {
+        console.log(e);
+      });
     },
     cancelChanges() {
       this.cvUrl = this.applicant.cvUrl;
       this.linkedinUrl = this.applicant.linkedinUrl;
       this.portfolioUrl = this.applicant.portfolioUrl;
+      this.cvFile = null;
+
+      location.reload();
+    },
+    openCvUrl() {
+      if (this.cvUrl) {
+        window.open(this.cvUrl, '_blank');
+      }
+    },
+    uploadCVUrl(event) {
+      this.cvFile = event.files[0];
     }
   }
 }

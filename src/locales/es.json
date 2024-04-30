@@ -77,7 +77,8 @@
     "address-placeholder": "Calle, Ciudad",
     "add-members-msg": "Una vez cree la organización, podrá agregar miembros y configurar los administradores",
     "create-organization": "Crear organización",
-    "get-invited": "Espera a ser invitado a una compañía"
+    "get-invited": "Espera a ser invitado a una compañía",
+    "website": "Sitio web"
   },
   "organization-profile": {
     "new-recruitment-btn-label": "Crear Reclutamiento",
@@ -98,8 +99,9 @@
     "add-members": "Agregar miembros",
     "company-admin": "Administrador de la compañía",
     "company-email": "Correo de la compañía",
+    "company-description": "Descripción de la compañía",
     "country": "País",
-    "company-phone": "Teléfono de la compañía",
+    "industry": "Industria",
     "company-address": "Dirección de la compañía",
     "save-changes": "Guardar cambios",
     "return": "Regresar",

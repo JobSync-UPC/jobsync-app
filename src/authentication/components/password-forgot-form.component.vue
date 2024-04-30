@@ -1,7 +1,4 @@
 <template>
-   <div class="fixed top-4 left-4 p-4 hidden md:block">
-    <img class="h-12 w-auto" src="/public/jobsync-icon.png " alt="JobSync Icon">
-  </div>
   <form class="bg-white dark:bg-black shadow-xl rounded px-8 pt-6 pb-8">
     <div class="flex flex-col space-y-6">
       <div>

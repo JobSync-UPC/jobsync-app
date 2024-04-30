@@ -15,4 +15,13 @@ export class ApplicantsService {
     updateById(id, data) {
         return http.put(`${id}`, data);
     }
+    changeCV(id, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        return http.post(`${id}/cv`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    }
 }
