@@ -1,5 +1,6 @@
 <template>
-  <form class="flex flex-col bg-white dark:bg-black rounded-xl shadow-lg gap-4 p-8">
+  <form v-on:submit="createCompany()"
+      class="flex flex-col bg-white dark:bg-black rounded-xl shadow-lg gap-4 p-8">
     <p class="text-3xl text-center font-bold">{{ $t('create-org.title') }}</p>
     <div class="flex flex-col items-center gap-4 py-8">
       <img
@@ -30,30 +31,8 @@
       <pv-input class="w-full" placeholder="JobSync Inc." required v-model="companyName" />
     </div>
     <div>
-      <p>{{ $t('create-org.choose-plan') }}</p>
-      <div class="grid grid-cols-2 gap-8">
-        <button
-          aria-label="Activate candidate form"
-          class="rounded-full py-2"
-          :class="[useFreePlan ? 'bg-primary text-white' : 'border-2 border-primary text-primary']"
-          @click="chooseFreePlan($event, true)"
-        >
-          {{ $t('plans.free') }}
-        </button>
-        <button
-          aria-label="Activate recruiter form"
-          class="rounded-full py-2"
-          :class="[!useFreePlan ? 'bg-primary text-white' : 'border-2 border-primary text-primary']"
-          @click="chooseFreePlan($event, false)"
-        >
-          <i class="pi pi-star" />
-            {{ $t('plans.premium') }}
-        </button>
-      </div>
-    </div>
-    <div>
-      <p>{{ $t('create-org.company-email') }}</p>
-      <pv-input class="w-full" placeholder="jobsync@mail.com" required v-model="companyName" />
+      <p>{{ $t('create-org.company-description') }}</p>
+      <pv-textarea class="w-full" v-model="description" />
     </div>
     <div class="grid grid-cols-2 items-end gap-4">
       <div>
@@ -62,19 +41,23 @@
           required
           id="country"
           class="w-full"
-          v-model="selectedCountry"
+          v-model="country"
           :options="countries"
           :placeholder="$t('create-org.select-country')"
         />
       </div>
       <div>
-        <label for="phone-number">{{ $t('create-org.phone-number') }}</label>
-        <pv-input id="phone-number" required class="w-full" v-model="phoneNumber" type="number" />
+        <label for="industry">{{ $t('create-org.industry') }}</label>
+        <pv-input id="industry" required class="w-full" v-model="industry" />
       </div>
     </div>
     <div>
       <p>{{ $t('create-org.company-address') }}</p>
-      <pv-input class="w-full" :placeholder="$t('create-org.address-placeholder')" required v-model="companyAddress" />
+      <pv-input class="w-full" :placeholder="$t('create-org.address-placeholder')" required v-model="address" />
+    </div>
+    <div>
+      <p>{{ $t('create-org.website') }}</p>
+      <pv-input class="w-full" placeholder="jobsync.com" required v-model="website" />
     </div>
     <pv-message severity="info" :closable="false">{{ $t('create-org.add-members-msg') }}</pv-message>
     <pv-button type="submit" outlined :label="$t('create-org.create-organization')"/>
@@ -90,13 +73,17 @@ export default  {
     return {
       reader: new FileReader(),
       file: null,
-      useFreePlan: true,
       previewImage: null,
-      companyName: '',
       countries: [],
-      selectedCountry: '',
-      phoneNumber: '',
-      companyAddress: '',
+
+      name: '',
+      description: '',
+      country: '',
+      address: '',
+      logoUrl: '',
+      website: '',
+      industry: '',
+
       countriesApi: new CountriesApiService(),
     };
   },
@@ -124,10 +111,18 @@ export default  {
       this.previewImage = null;
       this.$refs.fileUpload.clear();
     },
-    chooseFreePlan(event, state) {
-      event.preventDefault();
-      this.useFreePlan = state;
-    }
+    createCompany() {
+      const companyData = {
+        name: this.name,
+        description: this.description,
+        country: this.country,
+        address: this.address,
+        logoUrl: this.previewImage,
+        website: this.website,
+        industry: this.industry,
+      };
+      console.log(companyData);
+    },
   },
 }
 </script>
