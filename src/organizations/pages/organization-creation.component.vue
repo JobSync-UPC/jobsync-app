@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <pv-button
-      rounded
-      outlined
-      aria-label="Go back"
-      @click="$router.back()"
-    >
-      <i class="pi pi-arrow-left mr-2" />Go back
-    </pv-button>
-    <div class="flex justify-center items-center h-full">
-      <div class="w-full max-w-xl py-4">
-        <organization-creation-form />
-      </div>
+  <div class="flex justify-center">
+    <div class="py-4">
+      <organization-creation-form />
+    </div>
+    <div>
+      <pv-button
+        icon="pi pi-arrow-left"
+        label="Back"
+        @click="backToOrganizations"
+      />
     </div>
   </div>
 </template>

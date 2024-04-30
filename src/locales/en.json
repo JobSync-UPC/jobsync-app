@@ -70,14 +70,16 @@
     "company-name": "Company Name",
     "choose-plan": "Choose a plan",
     "company-email": "Company Email",
+    "company-description": "Company Description",
     "country": "Country",
     "select-country": "Select a Country",
-    "phone-number": "Phone Number",
+    "industry": "Industry",
     "company-address": "Company Address",
     "address-placeholder": "Street Address, City",
     "add-members-msg": "Once you create the organization, you can add members and set up administrators",
     "create-organization": "Create organization",
-    "get-invited": "Get invited to a company"
+    "get-invited": "Get invited to a company",
+    "website": "Website"
   },
   "organization-profile": {
     "new-recruitment-btn-label": "Create Recruitment",

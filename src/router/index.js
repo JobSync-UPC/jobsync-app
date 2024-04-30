@@ -13,7 +13,10 @@ import JobsPostsPage from "../applicants/pages/jobs-posts.page.vue";
 import ApplicantProfilePage from "../applicants/pages/applicant-profile.page.vue";
 import ApplicationsPage from "../applications/pages/applications.page.vue";
 import RecruitmentsListPage from "../recruitment/pages/recruitments-list.page.vue";
-import RecruiterInitPage from "../recruiter/pages/recruiter-init.page.vue";
+import RecruiterInitPage from "../organizations/pages/recruiter-init.page.vue";
+import OrganizationCreationComponent from "../organizations/pages/organization-creation.component.vue";
+import OrganizationCreationFormComponent from "../organizations/components/organization-creation-form.component.vue";
+import OrganizationCreationForm from "../organizations/components/organization-creation-form.component.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -34,6 +37,7 @@ const router = createRouter({
 
       // Recruiters
       { path: '/init', name: 'Recruiters without company init page', component:RecruiterInitPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
+      { path: '/company-create', name: 'Company creation page', component:OrganizationCreationForm , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/recruitments', name: 'Recruitments management', component:RecruitmentsListPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
 
 

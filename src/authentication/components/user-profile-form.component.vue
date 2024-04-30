@@ -15,15 +15,8 @@
           <p class="text-center text-xl">{{this.user.email}}</p>
         </div>
         <form v-on:submit="saveChanges($event)" class="flex flex-col space-y-3">
-          <div>
-            <label for="profilePictureUrl">{{ $t('auth.change-profile-picture') }}</label>
-            <pv-input
-                id="profilePictureUrl"
-                class="w-full"
-                v-model="profilePictureUrl"
-                placeholder="URL"
-                type="text"
-            />
+          <div class="justify-center flex items-center">
+            <pv-file-upload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @select="uploadProfilePicture" />
           </div>
           <div class="grid grid-cols-2 items-end gap-4">
             <div>
@@ -123,6 +116,8 @@ export default {
       countriesApi: new CountriesApiService(),
       userApi: new UsersApiService(),
       user:null,
+
+      profilePictureFile: null
     }
   },
   created() {
@@ -158,16 +153,40 @@ export default {
             this.countries.push("Error loading countries");
           })
     },
+    uploadProfilePicture(event) {
+      this.profilePictureFile = event.files[0]; // Save the file locally
+    },
     saveChanges(event) {
       event.preventDefault();
 
-      this.user.profilePictureUrl = this.profilePictureUrl;
       this.user.firstname = this.firstName;
       this.user.lastname = this.lastName;
       this.user.phoneNumber = this.phoneNumber;
       this.user.country = this.selectedCountry;
 
-
+      if (this.profilePictureFile !== null) {
+        console.log("Uploading profile picture");
+        this.userApi.changeProfilePicture(this.user.id, this.profilePictureFile)
+            .then(response => {
+              this.profilePictureUrl = response.data.profilePictureUrl;
+              console.log("Profile picture uploaded successfully");
+              this.updateUser();
+            })
+            .catch(e => {
+              console.error(e.response);
+              this.$toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Error uploading profile picture",
+                life: 1000
+              });
+              this.updateUser();
+            });
+      } else {
+        this.updateUser();
+      }
+    },
+    updateUser() {
       this.userApi.updateById(this.user.id,
           {
             firstname: this.firstName,
@@ -177,23 +196,38 @@ export default {
             country: this.selectedCountry
           }
       ).then(response => {
-        let data = JSON.parse(localStorage.getItem("user"));
-
-        // Update the user data
-        data.user = this.user;
-
-        // Save the updated data back to local storage
-        localStorage.setItem("user", JSON.stringify(data));
-
         this.$toast.add({
           severity: "success",
           summary: "Success",
-          detail: "Profile updated successfully " + response.data.message,
+          detail: "Profile updated successfully",
           life: 1000
         });
 
-        //reload the page
-        location.reload();
+        // Refresh the user data from the server
+        this.userApi.getById(getUser().id).then(
+            response => {
+              this.user = response.data;
+
+              this.firstName = this.user.firstname;
+              this.lastName = this.user.lastname;
+              this.phoneNumber = this.user.phoneNumber;
+              this.selectedCountry = this.user.country;
+              this.profilePictureUrl = this.user.profilePictureUrl;
+
+              // User store
+              let data = JSON.parse(localStorage.getItem("user"));
+              // Update the user data
+              data.user = this.user;
+              // Save the updated user data into local storage
+              localStorage.setItem("user", JSON.stringify(data));
+
+              location.reload();
+            }
+        ).catch(e => {
+          console.log(e);
+        });
+
+        this.profilePictureFile = null;
       }).catch(e => {
         this.$toast.add({
           severity: "error",
@@ -201,7 +235,7 @@ export default {
           detail: "Error updating profile",
           life: 1000
         });
-      })
+      });
     }
   }
 }
