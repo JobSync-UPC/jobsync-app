@@ -114,7 +114,8 @@
 // Dependencies
 import {AuthApiService} from "./authentication/services/authApiService.js";
 import {useThemeStore} from "./settings/stores/app-theme.store.js";
-import {useUserStore} from "./authentication/store/user-store.store.js";
+import {useUserStore} from "./shared/store/user-store.store.js";
+import {UsersApiService} from "./shared/services/users.service.js";
 
 export default {
   data() {
@@ -128,17 +129,9 @@ export default {
         "/recover-password"
       ]),
       authApi: new AuthApiService(),
+      userApi: new UsersApiService(),
       user: null,
       userOptions: false,
-      applicantItems: [
-        {label: 'Jobs', command: () => this.$router.push('/jobs')},
-        {label: 'Applications', command: () => this.$router.push('/applications')},
-        {label: 'Profile', command: () => this.$router.push('/profile')}
-      ],
-      recruiterItems: [
-        {label: 'Recruitments', command: () => this.$router.push('/recruitments')},
-        {label: 'Company', command: () => this.$router.push('/company-profile')}
-      ]
     }
   },
   setup() {
@@ -175,14 +168,48 @@ export default {
     localStorageUser(newUserData, oldUserData) {
       if (newUserData && newUserData !== oldUserData) {
         this.user = newUserData;
+        const userStore = useUserStore();
+        userStore.updateUser(newUserData);
       }
     }
   },
   mounted() {
-    const store = useThemeStore();
-    store.initTheme();
+    const userStore = useUserStore();
+
+    // Initialize userApi
+    const userApi = new UsersApiService();
+
+    // Update user data every 10 seconds
+    this.intervalId = setInterval(() => {
+      this.updateUserStore(userStore, userApi);
+    }, 10000);
+
+    // Perform initial validation
+    this.validateCompanyId(userStore, userApi);
+  },
+  beforeUnmount() {
+    clearInterval(this.intervalId); // Clear the interval when the component is unmounted
   },
   methods: {
+    async updateUserStore(userStore, userApi) {
+      try {
+        const response = await userApi.getById(userStore.user.id);
+        userStore.updateUser(response.data);
+      } catch (error) {
+        console.error('Error updating user data:', error);
+      }
+    },
+    async validateCompanyId(userStore, userApi) {
+      try {
+        const response = await userApi.getById(userStore.user.id);
+        const updatedCompanyId = response.data.company.id;
+        if (updatedCompanyId !== userStore.companyId) {
+          userStore.companyId = updatedCompanyId;
+        }
+      } catch (error) {
+        console.error('Error validating company ID:', error);
+      }
+    },
     isAnAuthenticationPath(path) {
       return this.authenticationPaths.has(path);
     },

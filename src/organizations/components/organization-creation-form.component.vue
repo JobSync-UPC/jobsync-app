@@ -66,6 +66,10 @@
 
 <script>
 import {CountriesApiService} from "../../shared/services/countries.service.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
+import {CompaniesService} from "../service/companies.service.js";
+import {getUser} from "../../shared/services/user.js";
+import {ApplicantsService} from "../../applicants/service/applicants.service.js";
 
 export default  {
   name: "organization-creation-form",
@@ -85,6 +89,8 @@ export default  {
       industry: '',
 
       countriesApi: new CountriesApiService(),
+      companiesApi: new CompaniesService(),
+      applicantApi: new ApplicantsService(),
     };
   },
   created() {
@@ -112,16 +118,34 @@ export default  {
       this.$refs.fileUpload.clear();
     },
     createCompany() {
+      event.preventDefault();
+
+      const userStore = useUserStore();
+
       const companyData = {
         name: this.name,
         description: this.description,
         country: this.country,
         address: this.address,
-        logoUrl: this.previewImage,
+        logoUrl: 'https://cdn.worldvectorlogo.com/logos/acme-1.svg',
         website: this.website,
         industry: this.industry,
       };
-      console.log(companyData);
+      const recruiterId = userStore.user.id;
+
+      this.companiesApi.createCompany(companyData, recruiterId)
+        .then(() => {
+          this.$emit('company-created');
+          this.$toast.add({severity: 'success', summary: 'Success', detail: 'Company created successfully', life: 1000});
+        })
+        .catch((e) => {
+          this.$toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create company', life: 1000});
+          console.log(e.response)
+        });
+
+
+
+
     },
   },
 }

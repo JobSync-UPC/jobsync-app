@@ -34,7 +34,7 @@
 
 <script>
 import {AuthApiService} from "../services/authApiService.js";
-import {useUserStore} from "../store/user-store.store.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 
 export default {
   name: "login-form",
