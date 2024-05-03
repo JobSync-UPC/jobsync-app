@@ -3,13 +3,6 @@
     <div class="py-4">
       <organization-creation-form />
     </div>
-    <div>
-      <pv-button
-        icon="pi pi-arrow-left"
-        label="Back"
-        @click="backToOrganizations"
-      />
-    </div>
   </div>
 </template>
 

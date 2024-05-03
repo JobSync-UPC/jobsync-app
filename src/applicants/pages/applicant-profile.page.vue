@@ -102,7 +102,12 @@ export default {
               this.updateApplicant();
             }
         ).catch(e => {
-          console.log(e.response);
+          this.$toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "There was an error updating CV. Try again later.",
+            life: 2000
+          });
           this.cvFile= null;
           this.updateApplicant();
         });

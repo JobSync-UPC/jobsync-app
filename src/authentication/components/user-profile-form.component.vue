@@ -100,7 +100,7 @@
 
 <script>
 import {CountriesApiService} from "../../shared/services/countries.service.js";
-import {useUserStore} from "../store/user-store.store.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 import {getUser} from "../../shared/services/user.js";
 import {UsersApiService} from "../../shared/services/users.service.js";
 export default {
