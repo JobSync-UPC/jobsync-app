@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('auth', {
+export const useUserStore = defineStore('user', {
   state: () => ({
     isAuthenticated: false,
     role: null,
     user: null,
-    companyId: null,
+    hasCompany: false,
     token: null,
   }),
   actions: {
@@ -20,16 +20,23 @@ export const useUserStore = defineStore('auth', {
           this.user = data.recruiter;
 
           if (data.recruiter.company) {
-            this.companyId = data.recruiter.company.id;
+            this.hasCompany = true;
           }
         }
+    },
+    updateUser(data) {
+      this.user = data;
+      this.role = data.role;
+      if (data.company) {
+        this.hasCompany = true;
+      }
     },
     logout() {
       localStorage.removeItem("user");
       this.isAuthenticated = false;
       this.role = null;
       this.isApplicant = null;
-      this.companyId = null;
+      this.hasCompany = false;
       this.token = null;
     },
   }

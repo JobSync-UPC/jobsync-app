@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 // Pages
-import {useUserStore} from "../authentication/store/user-store.store.js";
+import {useUserStore} from "../shared/store/user-store.store.js";
 import RegisterComponent from "../authentication/pages/register.component.vue";
 import LoginComponent from "../authentication/pages/login.component.vue";
 import PasswordForgotComponent from "../authentication/pages/password-forgot.component.vue";
@@ -63,20 +63,21 @@ function handleApplicant(userStore, to, next) {
 
 // Function to handle routing for recruiters
 function handleRecruiter(userStore, to, next) {
+
     // If the router requires an applicant
     if (to.meta.requiresApplicant) {
         next('/');
     }
     // If the route requires a company and the user does not have a company, redirect to init
-    else if (to.meta.requiresCompany && !userStore.companyId) {
+    else if (to.meta.requiresCompany && !userStore.hasCompany) {
         next('/init');
     }
-    else if (to.path === '/init' && userStore.companyId) {
+    else if (to.path === '/init' && userStore.hasCompany) {
         next('/recruitments');
     }
     // If the user is trying to access the home path, redirect based on whether they have a company
     else if (to.path === '/home') {
-        userStore.companyId ? next('/recruitments') : next('/init');
+        userStore.hasCompany ? next('/recruitments') : next('/init');
     }
     else {
         next();

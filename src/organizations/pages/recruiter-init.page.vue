@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {useUserStore} from "../../authentication/store/user-store.store.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 
 export default {
   name: "RecruiterInitPage",
