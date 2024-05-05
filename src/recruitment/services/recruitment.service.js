@@ -1,25 +1,13 @@
 import axios from "axios";
-
-const BASE_URL = "https://jobsyncapitestigosvue.azurewebsites.net/api/v1/recruitment/processes";
+import {jobPostsBaseUrl, recruitmentProcessesBaseUrl} from "../../apiConfig.js";
 
 const http = axios.create({
-  baseURL: BASE_URL
+  baseURL: recruitmentProcessesBaseUrl
 });
 
+
 export class RecruitmentApiService {
-  getAll() {
-    return http.get('');
-  }
-
-  getById(id) {
-    return http.get(`/${id}`);
-  }
-
-  getPhases(id) {
-    return http.get(`/${id}/phases`);
-  }
-
-  create(data) {
-    return http.post('', data);
+  getRecruitmentProcessesByCompanyId(companyId) {
+    return http.get(`/company/${companyId}`);
   }
 }

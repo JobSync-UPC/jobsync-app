@@ -1,5 +1,5 @@
 
 export function getUser() {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem("auth");
     return user ? JSON.parse(user).user : null;
 }

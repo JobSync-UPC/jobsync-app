@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-full">
+  <div class="absolute inset-0 flex items-center justify-center">
     <div class="w-full max-w-xl">
       <register-form/>
     </div>

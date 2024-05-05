@@ -67,11 +67,11 @@
              position="topright" :modal="true" :draggable="false">
     <div class="grid">
       <pv-button :label="$t('navbar.user')" text plain
-                  @click="goProfileManagement"
+                 @click="this.$router.push('/manage-profile'); this.userOptions = false"
       />
       <pv-button
           :label="$t('settings.title')" text plain
-          @click="goSettings"
+          @click="this.$router.push('/settings'); this.userOptions = false"
       />
       <pv-button
           :label="$t('auth.logout')" text plain
@@ -84,26 +84,27 @@
              position="topright" :modal="true" :draggable="false">
     <div v-if="this.user && this.user.role === 'ROLE_APPLICANT'" class="grid">
       <pv-button :label="$t('navbar.jobs')" text plain
-                 @click="this.$router.push('/jobs')"
+                 @click="this.$router.push('/jobs'); this.visibleMobileBar = false"
       />
       <pv-button :label="$t('navbar.applications')" text plain
-                 @click="this.$router.push('/applications')"
+                 @click="this.$router.push('/applications'); this.visibleMobileBar = false"
       />
       <pv-button :label="$t('navbar.profile')" text plain
+                  @click="this.$router.push('/'); this.visibleMobileBar = false"
       />
     </div>
     <div v-else-if="this.user && this.user.role === 'ROLE_RECRUITER'" class="grid">
       <div v-if="this.user.company">
         <pv-button :label="$t('navbar.recruitments')" text plain
-                   @click="this.$router.push('/recruitments')"
+                   @click="this.$router.push('/recruitments'); this.visibleMobileBar = false"
         />
         <pv-button :label="$t('navbar.company')" text plain
-                   @click="this.$router.push('/company-profile')"
+                   @click="this.$router.push('/company-profile'); this.visibleMobileBar = false"
         />
       </div>
       <div v-else>
         <pv-button :label="$t('navbar.create-organization')" text plain
-                   @click="this.$router.push('/create-company')"
+                   @click="this.$router.push('/create-company'); this.visibleMobileBar = false"
         />
       </div>
     </div>
@@ -134,19 +135,10 @@ export default {
       userOptions: false,
     }
   },
-  setup() {
-    const userStore = useUserStore();
-
-    const setUser = (user) => {
-      userStore.setUser(user);
-    };
-
-    return { setUser };
-  },
   created() {
     this.$i18n.locale = localStorage.getItem("preferred-language") ?? "en";
-    const user = localStorage.getItem("user");
-    user && this.setUser(JSON.parse(user));
+    const user = localStorage.getItem("auth");
+
     if (user) {
       this.user = JSON.parse(user).user;
     }
@@ -155,8 +147,8 @@ export default {
     theme() {
       return useThemeStore().theme;
     },
-    localStorageUser() {
-      const user = localStorage.getItem("user");
+    user() {
+      const user = localStorage.getItem("auth");
       return user ? JSON.parse(user).user : null;
     }
   },
@@ -165,73 +157,30 @@ export default {
       const store = useThemeStore();
       store.setTheme(newTheme);
     },
-    localStorageUser(newUserData, oldUserData) {
-      if (newUserData && newUserData !== oldUserData) {
-        this.user = newUserData;
-        const userStore = useUserStore();
-        userStore.updateUser(newUserData);
-      }
-    }
   },
   mounted() {
     const userStore = useUserStore();
+    const userData = localStorage.getItem('auth');
 
-    // Initialize userApi
-    const userApi = new UsersApiService();
-
-    // Update user data every 10 seconds
-    this.intervalId = setInterval(() => {
-      this.updateUserStore(userStore, userApi);
-    }, 10000);
-
-    // Perform initial validation
-    this.validateCompanyId(userStore, userApi);
-  },
-  beforeUnmount() {
-    clearInterval(this.intervalId); // Clear the interval when the component is unmounted
+    if (userData) {
+      userStore.login(JSON.parse(userData));
+    }
   },
   methods: {
-    async updateUserStore(userStore, userApi) {
-      try {
-        const response = await userApi.getById(userStore.user.id);
-        userStore.updateUser(response.data);
-      } catch (error) {
-        console.error('Error updating user data:', error);
-      }
-    },
-    async validateCompanyId(userStore, userApi) {
-      try {
-        const response = await userApi.getById(userStore.user.id);
-        const updatedCompanyId = response.data.company.id;
-        if (updatedCompanyId !== userStore.companyId) {
-          userStore.companyId = updatedCompanyId;
-        }
-      } catch (error) {
-        console.error('Error validating company ID:', error);
-      }
-    },
     isAnAuthenticationPath(path) {
       return this.authenticationPaths.has(path);
     },
     logout() {
       this.userOptions = false;
       const userStore = useUserStore();
+      userStore.logout();
       this.$toast.add({
         severity: "warn",
         summary: "User",
         detail: "Logging out...",
         life: 1000
       });
-      userStore.logout();
       this.$router.push("/login");
-    },
-    goProfileManagement() {
-      this.$router.push("/manage-profile");
-      this.userOptions = false;
-    },
-    goSettings() {
-      this.$router.push("/settings");
-      this.userOptions = false;
     },
     greeting(){
       if (this.user) {
