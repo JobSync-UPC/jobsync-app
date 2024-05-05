@@ -6,12 +6,10 @@ const http = axios.create({
 });
 
 export class JobPostApiService {
-    createJobPost (companyId,recruiterId,data) {
-        return http.post(`/`,companyId,recruiterId, {
-            data.title,
-            data.description
+    createJobPost (companyId, recruiterId, jobPostData) {
+        return http.post(`/?companyId=${companyId}&recruiterId=${recruiterId}`, {
+            title: jobPostData.title,
+            description: jobPostData.description,
         })
-
-
     }
 }

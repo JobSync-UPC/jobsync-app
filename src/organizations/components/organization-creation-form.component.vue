@@ -28,7 +28,7 @@
     </div>
     <div>
       <p>{{ $t('create-org.company-name') }}</p>
-      <pv-input class="w-full" placeholder="JobSync Inc." required v-model="companyName" />
+      <pv-input class="w-full" placeholder="JobSync Inc." required v-model="name" />
     </div>
     <div>
       <p>{{ $t('create-org.company-description') }}</p>
@@ -137,9 +137,14 @@ export default  {
         .then(() => {
           this.$emit('company-created');
           this.$toast.add({severity: 'success', summary: 'Success', detail: 'Company created successfully', life: 1000});
+
+          const userStore = useUserStore();
+
+
+          this.$router.push('/');
         })
         .catch((e) => {
-          this.$toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create company', life: 1000});
+          this.$toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create company: ' + e.response.data, life: 1000});
           console.log(e.response)
         });
 

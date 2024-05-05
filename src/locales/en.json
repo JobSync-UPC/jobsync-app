@@ -57,7 +57,8 @@
     "logout": "Logout",
     "change-profile-picture": "Change profile picture (URL)",
     "save-chages": "Save changes",
-    "edit-profile": "Edit profile"
+    "edit-profile": "Edit profile",
+    "logging-in": "Loggin in..."
   },
   "greeting": {
     "morning-greeting": "Good Morning, ",
@@ -117,13 +118,15 @@
     "organizer-label": "Organizer"
   },
   "recruitment": {
+    "title": "Recruitment Processes",
     "create-recruitment": {
       "title": "New recruitment process",
       "title-placeholder": "Title",
-      "description-placeholder": "Description (Optional)",
+      "description-placeholder": "Description",
       "starting-date-lbl": "Starting date",
       "ending-date-lbl": "Ending date",
-      "create-submit-lbl": "Create"
+      "create-submit-lbl": "Create",
+      "creating": "Creating..."
     },
     "create-phase": {
       "title": "New phase",

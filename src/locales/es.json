@@ -57,7 +57,8 @@
     "logout": "Cerrar sesión",
     "change-profile-picture": "Cambiar foto de perfil (URL)",
     "save-chages": "Guardar cambios",
-    "edit-profile": "Editar perfil"
+    "edit-profile": "Editar perfil",
+    "logging-in": "Iniciando sesión..."
   },
   "greeting": {
     "morning-greeting": "Buenos días, ",
@@ -115,18 +116,20 @@
     "organizer-label": "Organizador"
   },
   "recruitment": {
+    "title": "Procesos de reclutamiento",
     "create-recruitment": {
       "title": "Nuevo proceso de reclutamiento",
       "title-placeholder": "Título",
-      "description-placeholder": "Descripción (Opcional)",
+      "description-placeholder": "Descripción",
       "starting-date-lbl": "Fecha de inicio",
       "ending-date-lbl": "Fecha de fin",
-      "create-submit-lbl": "Crear"
+      "create-submit-lbl": "Crear",
+      "creating": "Creando..."
     },
     "create-phase": {
       "title": "Nueva fase de reclutamiento",
       "title-placeholder": "Título",
-      "description-placeholder": "Descripción (Opcional)",
+      "description-placeholder": "Descripción",
       "create-submit-lbl": "Crear"
     },
     "dashboard": {

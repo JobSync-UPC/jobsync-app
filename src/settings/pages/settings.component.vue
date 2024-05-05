@@ -11,7 +11,3 @@ export default {
   components: {AppSettingsForm},
 }
 </script>
-
-<style scoped>
-
-</style>
