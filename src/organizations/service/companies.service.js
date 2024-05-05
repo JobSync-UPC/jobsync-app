@@ -23,6 +23,7 @@ export class CompaniesService {
     }
 
     createCompany (companyData,recruiterId) {
+        console.log(companyData.name);
         return http.post(`/create/${recruiterId}`, {
             name: companyData.name,
             description: companyData.description,

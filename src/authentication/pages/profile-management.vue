@@ -10,7 +10,3 @@ export default {
   components: {UserProfileForm}
 }
 </script>
-
-<style scoped>
-
-</style>

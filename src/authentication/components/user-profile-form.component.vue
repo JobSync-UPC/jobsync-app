@@ -25,7 +25,7 @@
                   required
                   id="first-name"
                   class="w-full"
-                  v-model="firstName"
+                  v-model="firstname"
                   :placeholder="$t('auth.first-name')"
                   type="text"
               />
@@ -42,32 +42,6 @@
               />
             </div>
           </div>
-          <!--
-          <div class="grid grid-cols-2 items-end gap-4">
-            <div>
-              <label for="password">{{ $t('auth.password') }}</label>
-              <pv-input
-                  required
-                  id="password"
-                  class="w-full"
-                  v-model="password"
-                  type="password"
-                  placeholder="••••••••••••"
-              />
-            </div>
-            <div>
-              <label for="confirm-password">{{ $t('auth.confirm-password') }}</label>
-              <pv-input
-                  required
-                  id="confirm-password"
-                  class="w-full"
-                  v-model="confirmPassword"
-                  type="password"
-                  placeholder="••••••••••••"
-              />
-            </div>
-          </div>
-          -->
           <div class="grid grid-cols-2 items-end gap-4">
             <div>
               <label for="country">{{ $t('auth.country') }}</label>
@@ -100,14 +74,14 @@
 
 <script>
 import {CountriesApiService} from "../../shared/services/countries.service.js";
-import {useUserStore} from "../../shared/store/user-store.store.js";
 import {getUser} from "../../shared/services/user.js";
 import {UsersApiService} from "../../shared/services/users.service.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 export default {
   name: "user-profile-form",
   data() {
     return {
-      firstName: '',
+      firstname: '',
       lastName: '',
       phoneNumber: '',
       selectedCountry: '',
@@ -122,11 +96,13 @@ export default {
   },
   created() {
     this.loadCountries();
+
+
     this.userApi.getById(getUser().id).then(
         response => {
           this.user = response.data;
 
-          this.firstName = this.user.firstname;
+          this.firstname = this.user.firstname;
           this.lastName = this.user.lastname;
           this.phoneNumber = this.user.phoneNumber;
           this.selectedCountry = this.user.country;
@@ -135,12 +111,6 @@ export default {
     ).catch(e => {
       console.log(e);
     });
-  },
-  setup() {
-    const userStore = useUserStore();
-    const user = userStore.user; // Access the user data from the store
-
-    return { user };
   },
   methods: {
     loadCountries() {
@@ -170,7 +140,6 @@ export default {
             .then(response => {
               this.profilePictureUrl = response.data.profilePictureUrl;
               console.log("Profile picture uploaded successfully");
-              this.updateUser();
             })
             .catch(e => {
               console.error(e.response);
@@ -180,67 +149,12 @@ export default {
                 detail: "Error uploading profile picture",
                 life: 1000
               });
-              this.updateUser();
             });
-      } else {
-        this.updateUser();
       }
+
+      const userStore = useUserStore();
+      userStore.updateUser();
     },
-    updateUser() {
-      this.userApi.updateById(this.user.id,
-          {
-            firstname: this.firstName,
-            lastname: this.lastName,
-            phoneNumber: this.phoneNumber,
-            profilePictureUrl: this.profilePictureUrl,
-            country: this.selectedCountry
-          }
-      ).then(response => {
-        this.$toast.add({
-          severity: "success",
-          summary: "Success",
-          detail: "Profile updated successfully",
-          life: 1000
-        });
-
-        // Refresh the user data from the server
-        this.userApi.getById(getUser().id).then(
-            response => {
-              this.user = response.data;
-
-              this.firstName = this.user.firstname;
-              this.lastName = this.user.lastname;
-              this.phoneNumber = this.user.phoneNumber;
-              this.selectedCountry = this.user.country;
-              this.profilePictureUrl = this.user.profilePictureUrl;
-
-              // User store
-              let data = JSON.parse(localStorage.getItem("user"));
-              // Update the user data
-              data.user = this.user;
-              // Save the updated user data into local storage
-              localStorage.setItem("user", JSON.stringify(data));
-
-              location.reload();
-            }
-        ).catch(e => {
-          console.log(e);
-        });
-
-        this.profilePictureFile = null;
-      }).catch(e => {
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Error updating profile",
-          life: 1000
-        });
-      });
-    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

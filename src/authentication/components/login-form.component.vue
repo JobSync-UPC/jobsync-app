@@ -11,15 +11,19 @@
           <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="email">
             {{ $t('auth.e-mail') }}
           </label>
-          <pv-input id="email" class="w-full" v-model="email" placeholder="Enter your email" type="email" />
+          <pv-input id="email" class="w-full" v-model="email" placeholder="Enter your email" type="email" required />
         </div>
       <div class="w-full">
         <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="password">
           {{ $t('auth.password') }}
         </label>
-        <pv-input id="password" class="w-full" v-model="password" type="password" placeholder="••••••••••••" />
+        <pv-input id="password" class="w-full" v-model="password" type="password" placeholder="••••••••••••" required />
       </div>
-      <pv-button type="submit" :label="$t('auth.login')" outlined />
+      <pv-button type="submit"
+                 outlined
+                 :label="isLoggingIn ? $t('auth.logging-in') : $t('auth.login')"
+                 :disabled="isLoggingIn"
+      />
       <div class="grid place-items-center">
         <p class="text-primary">
           <router-link to="/forgot-password" class="hover:font-medium">{{ $t('auth.forgot-password') }}</router-link>
@@ -42,42 +46,41 @@ export default {
     return {
       email: '',
       password: '',
-      authApi: new AuthApiService()
+      authApi: new AuthApiService(),
+      isLoggingIn: false
     }
-  },
-  setup() {
-    const userStore = useUserStore();
-
-    const setUser = (user) => {
-      userStore.setUser(user);
-    };
-
-    return { setUser };
   },
   methods: {
     login(event) {
       event.preventDefault();
+      const userStore = useUserStore();
+
+      this.isLoggingIn = true;
+
       this.authApi.signIn(this.email, this.password)
         .then(res => {
           if (res.data.token) {
-            localStorage.setItem('user', JSON.stringify(res.data));
+            localStorage.setItem('auth', JSON.stringify(res.data));
           }
+          userStore.login(res.data);
+
           this.$toast.add({
             severity: "success",
             summary: "JobSync",
             detail: "Logged in",
             life: 2000
           });
-          this.setUser(res.data);
-          location.reload();
-          this.$router.push("/home")
+          this.$router.push("/")
         })
         .catch(err => this.$toast.add({
           severity: "warn",
           detail: "Invalid email or password",
           summary: err.response.data.message,
           life: 2000
-        }));
+        }))
+        .finally(() =>
+            this.isLoggingIn = false
+        );
     }
   }
 }

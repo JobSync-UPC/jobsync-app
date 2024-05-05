@@ -14,8 +14,6 @@ import ApplicantProfilePage from "../applicants/pages/applicant-profile.page.vue
 import ApplicationsPage from "../applications/pages/applications.page.vue";
 import RecruitmentsListPage from "../recruitment/pages/recruitments-list.page.vue";
 import RecruiterInitPage from "../organizations/pages/recruiter-init.page.vue";
-import OrganizationCreationComponent from "../organizations/pages/organization-creation.component.vue";
-import OrganizationCreationFormComponent from "../organizations/components/organization-creation-form.component.vue";
 import OrganizationCreationForm from "../organizations/components/organization-creation-form.component.vue";
 
 const router = createRouter({
@@ -27,7 +25,7 @@ const router = createRouter({
       { path: '/forgot-password', name: 'Forgot Password', component: PasswordForgotComponent, meta: { requiresAuth: false } },
       { path: '/recover-password', name: 'Recover Password', component: PasswordRecoveryComponent, meta: { requiresAuth: false } },
       // User profile edit and settings
-      { path: '/manage-profile', name: 'User-Profile', component: ProfileManagement, meta: { requiresAuth: true } },
+      { path: '/manage-profile', name: 'User Profile', component: ProfileManagement, meta: { requiresAuth: true } },
       { path: '/settings', name: 'Settings', component: SettingsComponent, meta: { requiresAuth: true } },
 
       // Applicants
