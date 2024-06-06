@@ -1,156 +1,193 @@
 <template>
-  <form class="flex flex-col bg-white dark:bg-black rounded-xl shadow-lg gap-4 p-8">
-    <p class="text-3xl text-center font-bold">{{ $t('organization-settings.title') }}</p>
-    <hr class="mb-4">
-    <div class="flex flex-col items-center gap-4 py-8">
-      <div class="flex items-center justify-between">
-        <p class="font-bold text-2xl">{{ currentOrganization.name }}</p>
-        <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
-      </div>
-      <div>
-        <img
-            :src="currentOrganization.avatarUrl"
-            alt="Organization Profile Picture"
-            class="rounded-3xl w-32 h-32 object-cover hover:scale-95 duration-200"/>
-      </div>
-      <div class="flex justify-center items-center gap-3">
-        <pv-file-upload
-            ref="fileUpload"
-            mode="basic"
-            v-model="file"
-            accept="image/*"
-            :chooseLabel="$t('organization-settings.change-picture')"
-            :maxFileSize="5000000"
-            @select="selectedFile"
-        />
-      </div>
-      <div class="w-full  ">
-        <div class="flex items-center mt-4">
-          <label for="organization">{{ $t('organization-settings.current-plan') }}</label>
-          <div class="card flex justify-content-center ml-4 ">
+  <p class="text-2xl font-bold text-primary py-2 text-center">{{ $t('organization-settings.title') }}</p>
+  <div class="flex items-center justify-center min-h-screen">
+    <form v-on:submit="updateCompany($event)"
+        class="flex flex-col bg-white dark:bg-black rounded-xl shadow-lg p-8 gap-4 md:w-1/2 justify-center">
+      <div class="flex flex-col items-center gap-4 py-4">
+        <div>
+          <img
+              :src="logoUrl"
+              alt="Organization Profile Picture"
+              class="rounded-3xl w-40 h-40 object-cover hover:scale-95 duration-200 shadow p-2"/>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="font-bold text-3xl text-primary">{{ name }}</p>
+        </div>
+        <div class="flex justify-center items-center gap-3">
+          <pv-file-upload
+              ref="fileUpload"
+              mode="basic"
+              v-model="file"
+              accept="image/*"
+              :chooseLabel="$t('organization-settings.change-picture')"
+              :maxFileSize="5000000"
+              @select="selectedFile"
+          />
+        </div>
+        <div class="grid items-center">
+          <div class="card grid justify-content-center ">
             <pv-button
                 outlined
                 aria-label="Change Plan button"
-                :label="$t('plans.free')"
+                :label="$t('organization-settings.current-plan') + ': ' + $t('plans.free')"
                 class="w-full"
                 @click="planVisible = true"
             />
-            <pv-dialog
-                v-model:visible="planVisible" modal
-                :header="$t('organization-settings.plan-options')"
-                :style="{ width: '50vw' }"
-                :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
-                :draggable="false"
-            >
-              <div class="grid grid-rows-[auto_1fr] grid-cols-1 xl:grid-cols-2 xl:grid-rows-1 gap-2 lg:gap-4">
-                <pv-card :class="{ 'border border-gray-300 rounded-lg p-4': selectedPlan === 'plan1' }">
-                  <template #title>{{ $t('plans.free') }}</template>
-                  <template #content>
-                    <ul>
-                      <li>{{ $t('plans.free-feature-1') }}</li>
-                      <li>{{ $t('plans.free-feature-2') }}</li>
-                      <li>{{ $t('plans.free-feature-3') }}</li>
-                    </ul>
-                  </template>
-                  <template #footer>
-                    <div class="flex items-center justify-center">
-                      <pv-radiobutton
-                          v-model="selectedPlan"
-                          value="plan1"
-                          @click="handleRadioButtonClick('plan1', $event)"
-                          @input="highlightCard('plan1')" />
-                    </div>
-                  </template>
-                </pv-card>
-                <pv-card :class="{ 'border border-gray-300 rounded-lg p-4': selectedPlan === 'plan2' }">
-                  <template #title>{{ $t('plans.premium') }}</template>
-                  <template #content>
-                    <ul>
-                      <li>{{ $t('plans.premium-feature-1') }}</li>
-                      <li>{{ $t('plans.premium-feature-2') }}</li>
-                      <li>{{ $t('plans.premium-feature-3') }}</li>
-                      <li>{{ $t('plans.premium-feature-4') }}</li>
-                    </ul>
-                  </template>
-                  <template #footer>
-                    <div class="flex items-center justify-center  ">
-                      <pv-radiobutton
-                          v-model="selectedPlan"
-                          value="plan2"
-                          @click="handleRadioButtonClick('plan2', $event)"
-                          @input="highlightCard('plan2')"
-                      />
-                    </div>
-                  </template>
-                </pv-card>
-              </div>
-              <template #footer>
-                <pv-button
-                    :label="$t('organization-settings.accept')"
-                    icon="pi pi-check"
-                    @click="planVisible = false"
-                    outlined
-                />
-              </template>
-            </pv-dialog>
-
           </div>
+        </div>
+        <div class="w-full">
+          <label for="organization-email">{{ $t('create-org.company-name') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-input id="organization-email" required v-model="name" class="w-full"/>
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+        <div class="w-full">
+          <label for="organization-email">{{ $t('create-org.company-description') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-textarea id="organization-email" required v-model="description" class="w-full"/>
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+        <div class="w-full">
+          <label for="country">{{ $t('create-org.country') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-dropdown
+                required
+                id="country"
+                class="w-full"
+                v-model="country"
+                :options="countries"
+                :placeholder="$t('create-org.select-country')"
+            />
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+        <div class="w-full">
+          <label for="organization-email">{{ $t('create-org.company-address') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-input id="organization-email" required v-model="address" class="w-full"/>
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+        <div class="w-full">
+          <label for="organization-email">{{ $t('create-org.website') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-input id="organization-email" required v-model="website" class="w-full"/>
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+        <div class="w-full">
+          <label for="organization-email">{{ $t('create-org.industry') }}</label>
+          <div class="flex items-center justify-between">
+            <pv-input id="organization-email" required v-model="industry" class="w-full"/>
+            <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
+          </div>
+        </div>
+      </div>
+      <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')" outlined/>
+    </form>
+  </div>
 
-        </div>
-      </div>
-      <div class="w-full">
-        <label for="organization-email">{{ $t('organization-settings.company-email') }}</label>
-        <div class="flex items-center justify-between">
-          <pv-input id="organization-email" required v-model="currentOrganization.email" class="w-full"/>
-          <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
-        </div>
-      </div>
-      <div class="w-full">
-        <label for="organization-phone-number">{{ $t('organization-settings.company-phone') }}</label>
-        <div class="flex items-center justify-between">
-          <pv-input id="organization-phone-number" v-model="currentOrganization.phoneNumber" required class="w-full"
-                    type="number"/>
-          <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
-        </div>
-      </div>
-      <div class="w-full">
-        <label for="organization-address">{{ $t('organization-settings.company-address') }}</label>
-        <div class="flex items-center justify-between">
-          <pv-input id="organization-address" v-model="currentOrganization.address" required class="w-full"/>
-          <pv-button icon="pi pi-pencil" severity="help" text rounded aria-label="Edit"/>
-        </div>
-      </div>
+  <pv-dialog
+      v-model:visible="planVisible" modal
+      :header="$t('organization-settings.plan-options')"
+      :style="{ width: '50vw' }"
+      :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+      :draggable="false"
+  >
+    <div class="grid grid-rows-[auto_1fr] grid-cols-1 xl:grid-cols-2 xl:grid-rows-1 gap-2 lg:gap-4">
+      <pv-card :class="{ 'border border-gray-300 rounded-lg p-4': selectedPlan === 'plan1' }">
+        <template #title>{{ $t('plans.free') }}</template>
+        <template #content>
+          <ul>
+            <li>{{ $t('plans.free-feature-1') }}</li>
+            <li>{{ $t('plans.free-feature-2') }}</li>
+            <li>{{ $t('plans.free-feature-3') }}</li>
+          </ul>
+        </template>
+        <template #footer>
+          <div class="flex items-center justify-center">
+            <pv-radiobutton
+                v-model="selectedPlan"
+                value="plan1"
+                @click="handleRadioButtonClick('plan1', $event)"
+                @input="highlightCard('plan1')" />
+          </div>
+        </template>
+      </pv-card>
+      <pv-card :class="{ 'border border-gray-300 rounded-lg p-4': selectedPlan === 'plan2' }">
+        <template #title>{{ $t('plans.premium') }}</template>
+        <template #content>
+          <ul>
+            <li>{{ $t('plans.premium-feature-1') }}</li>
+            <li>{{ $t('plans.premium-feature-2') }}</li>
+            <li>{{ $t('plans.premium-feature-3') }}</li>
+            <li>{{ $t('plans.premium-feature-4') }}</li>
+          </ul>
+        </template>
+        <template #footer>
+          <div class="flex items-center justify-center  ">
+            <pv-radiobutton
+                v-model="selectedPlan"
+                value="plan2"
+                @click="handleRadioButtonClick('plan2', $event)"
+                @input="highlightCard('plan2')"
+            />
+          </div>
+        </template>
+      </pv-card>
     </div>
-    <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')" outlined/>
-  </form>
+    <template #footer>
+      <pv-button
+          :label="$t('organization-settings.accept')"
+          icon="pi pi-check"
+          @click="planVisible = false"
+          outlined
+      />
+    </template>
+  </pv-dialog>
 </template>
 
 <script>
-import {OrganizationApiService} from "../../shared/services/organizations.service.js";
 import {CountriesApiService} from "../../shared/services/countries.service.js";
-
+import {CompaniesService} from "../service/companies.service.js";
 
 export default {
   name: "organization-settings-form",
-
+  props: {
+    currentOrganization: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      currentOrganizationId: 1,
-      currentOrganization: {},
-      organizationService: new OrganizationApiService,
       countries: [],
       countriesApi: new CountriesApiService(),
       selectedCountry: 'Peru',
       planVisible: false,
       selectedPlan: null,
+      companyService: new CompaniesService(),
+
+      logoUrl: '',
+      name: '',
+      description: '',
+      country: '',
+      address: '',
+      website: '',
+      industry: '',
     };
   },
   created() {
-    this.organizationService.getCurrentOrganization(this.currentOrganizationId)
-        .then(response => this.currentOrganization = response.data)
-        .catch(error => {
-          console.error('An error occurred with organization:', error);
-        });
+    this.loadCountries();
+    this.logoUrl = this.currentOrganization.logoUrl;
+    this.name = this.currentOrganization.name;
+    this.description = this.currentOrganization.description;
+    this.country = this.currentOrganization.country;
+    this.address = this.currentOrganization.address;
+    this.website = this.currentOrganization.website;
+    this.industry = this.currentOrganization.industry;
   },
   methods: {
     loadCountries() {
@@ -161,7 +198,7 @@ export default {
           })
           .catch(error => {
             this.countries.push("Error loading countries");
-          })
+          });
     },
     highlightCard(plan) {
       this.selectedPlan = plan;
@@ -169,7 +206,41 @@ export default {
     handleRadioButtonClick(plan, event) {
       event.stopPropagation();
     },
+    updateCompany(event) {
+      event.preventDefault();
+      this.companyService
+          .updateCompanyById(
+              this.currentOrganization.id,
+              {
+                name: this.name,
+                description: this.description,
+                country: this.country,
+                address: this.address,
+                logoUrl: this.logoUrl,
+                website: this.website,
+                industry: this.industry,
+              }
+          )
+          .then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "JobSync",
+              detail: "Updated",
+              life: 2000
+            });
+            this.$emit('updatedCompany');
+          })
+          .catch(error => {
+            this.$toast.add({
+              severity: "warn",
+              detail: "Invalid email or password",
+              summary: error.response.data.message,
+              life: 2000
+            });
+          });
+    }
   }
+
 }
 </script>
 

@@ -51,13 +51,18 @@ export default {
           userStore.user.company.id,
           userStore.user.id,
           newJobPost
-      ).then((response) => {
+      ).then(() => {
         this.$toast.add({
           severity: "success",
           summary: "JobSync",
           detail: "Job Post created successfully!",
           life: 2000
         });
+
+        this.title = '';
+        this.description = '';
+
+        this.$emit('post-created');
       }).catch((error) => {
         this.$toast.add({
           severity: "error",
