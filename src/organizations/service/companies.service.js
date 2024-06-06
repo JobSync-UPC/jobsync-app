@@ -14,8 +14,8 @@ export class CompaniesService {
         return http.get(`/`);
     }
 
-    updateCompanyById (id) {
-        return http.put(`/update/${id}`);
+    updateCompanyById (id, data) {
+        return http.put(`/update/${id}`,data);
     }
 
     addRecruitersToCompany (companyId,recruiterId) {

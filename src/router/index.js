@@ -15,6 +15,7 @@ import ApplicationsPage from "../applications/pages/applications.page.vue";
 import RecruitmentsListPage from "../recruitment/pages/recruitments-list.page.vue";
 import RecruiterInitPage from "../organizations/pages/recruiter-init.page.vue";
 import OrganizationCreationForm from "../organizations/components/organization-creation-form.component.vue";
+import OrganizationProfileComponent from "../organizations/pages/organization-profile.component.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -36,7 +37,9 @@ const router = createRouter({
       // Recruiters
       { path: '/init', name: 'Recruiters without company init page', component:RecruiterInitPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/company-create', name: 'Company creation page', component:OrganizationCreationForm , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
+      { path: '/company-profile', name: 'Company profile page', component:OrganizationProfileComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/recruitments', name: 'Recruitments management', component:RecruitmentsListPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
+
 
 
       // Support

@@ -37,6 +37,7 @@ import Toast from "primevue/toast";
 import Toolbar from "primevue/toolbar";
 import Avatar from "primevue/avatar";
 import Textarea from "primevue/textarea";
+import ProgressSpinner from "primevue/progressspinner";
 
 // Pinia
 const pinia = createPinia();
@@ -68,4 +69,5 @@ createApp(App)
     .component('pv-tag', Tag)
     .component('pv-radiobutton', RadioButton)
     .component('pv-paginator', Paginator)
+    .component('pv-spinner', ProgressSpinner)
     .mount('#app')

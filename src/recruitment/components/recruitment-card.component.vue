@@ -11,9 +11,11 @@
           </li>
           <li>
             <span class="font-semibold">{{ $t('recruitment-card.start-date-label') }}: </span>
-            {{ recruitment.jobPost.start-date }}
+            {{ formatDate(recruitment.created_date) }}
           </li>
-          <li class="text-lg font-medium">
+          <li class="font-medium">
+            <span class="font-bold text-primary">{{ recruitment.company.name }}</span>
+            •
             {{ recruitment.company.country }}
           </li>
           <li>
@@ -39,9 +41,14 @@ export default {
     }
   },
   methods:{
-      getStatus(status) {
-        return status === true ? "Open" : "Closed";
-      }
+    getStatus(status) {
+      return status === true ? "Open" : "Closed";
+    },
+    formatDate(date) {
+      if (!date) return "";
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+      return new Date(date).toLocaleString('en-US', options);
+    }
   }
 }
 </script>

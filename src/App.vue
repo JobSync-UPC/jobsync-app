@@ -191,6 +191,7 @@ export default {
     },
     handleUser() {
       const userStore = useUserStore();
+      userStore.updateUser();
       this.user = userStore.user;
     }
   }

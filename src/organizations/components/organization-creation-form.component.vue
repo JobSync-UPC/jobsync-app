@@ -140,21 +140,13 @@ export default  {
 
           const userStore = useUserStore();
 
-
           this.$router.push('/');
         })
         .catch((e) => {
           this.$toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create company: ' + e.response.data, life: 1000});
           console.log(e.response)
         });
-
-
-
-
     },
   },
 }
 </script>
-
-<style scoped>
-</style>
