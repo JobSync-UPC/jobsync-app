@@ -1,5 +1,5 @@
 // This file contains the base URL for the API endpoints
-const baseUrl = 'https://jobsync-api.azurewebsites.net/api/v1/';
+const baseUrl = 'http://localhost:8091/api/v1/';
 
 export const authBaseUrl = `${baseUrl}auth`;
 export const usersBaseUrl = `${baseUrl}users`;

@@ -27,6 +27,7 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Tag from 'primevue/tag';
 import RadioButton from "primevue/radiobutton";
+import Paginator from 'primevue/paginator';
 
 
 
@@ -66,4 +67,5 @@ createApp(App)
     .component('pv-dialog', Dialog)
     .component('pv-tag', Tag)
     .component('pv-radiobutton', RadioButton)
+    .component('pv-paginator', Paginator)
     .mount('#app')

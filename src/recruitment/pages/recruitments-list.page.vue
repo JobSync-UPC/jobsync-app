@@ -1,51 +1,103 @@
 <template>
   <div>
-    <pv-button outlined v-on:click="openCreateRecruitmentProcess">
-      {{$t('organization-profile.new-recruitment-btn-label')}}
-    </pv-button>
-    <h1>{{$t('recruitment.title')}}</h1>
-    <pv-data-table :value="this.recruitmentProcesses">
-      <pv-column field="jobPost.title" :header="$t('recruitment.create-recruitment.title-placeholder')" />
-      <pv-column field="jobPost.description" :header="$t('recruitment.create-recruitment.description-placeholder')" />
-    </pv-data-table>
+    <h1 class="text-2xl text-primary font-bold py-2">{{$t('recruitment.title')}}</h1>
+    <div class="flex justify-between items-center">
+      <pv-button outlined @click="openCreateRecruitmentProcess">
+        {{$t('organization-profile.new-recruitment-btn-label')}}
+      </pv-button>
+      <div class="flex items-center">
+        <input type="text" v-model="searchTerm" @keyup.enter="confirmSearch" placeholder="Search..." class="border p-2 rounded"/>
+        <pv-button icon="pi pi-search" aria-label="Search" outlined @click="confirmSearch" />
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4 py-4">
+      <div v-for="recruitmentProcess in displayedRecruitmentProcesses" :key="recruitmentProcess.id">
+        <recruitment-card :recruitment="recruitmentProcess" />
+      </div>
+    </div>
+    <pv-paginator
+        :totalRecords="filteredRecruitmentProcesses.length"
+        @page="handlePageChange"
+        :rows="pageSize"
+    />
+    <pv-dialog v-model:visible="createRecruitmentProcessDialog"
+               :header="$t('organization-profile.new-recruitment-btn-label')" modal class="w-full md:w-1/3"
+               dismissableMask>
+      <create-recruitment-process @post-created="handlePostCreated"/>
+    </pv-dialog>
   </div>
-  <pv-dialog v-model:visible="createRecruitmentProcessDialog" :header="$t('organization-profile.new-recruitment-btn-label')"
-             modal class="w-full md:w-1/3" dismissableMask>
-    <create-recruitment-process />
-  </pv-dialog>
 </template>
 
-<script >
+
+
+<script>
 import CreateRecruitmentProcess from "../components/create-recruitment-process.vue";
-import {useUserStore} from "../../shared/store/user-store.store.js";
-import {RecruitmentApiService} from "../services/recruitment.service.js";
+import { useUserStore } from "../../shared/store/user-store.store.js";
+import { RecruitmentApiService } from "../services/recruitment.service.js";
+import RecruitmentCard from "../components/recruitment-card.component.vue";
 
 export default {
   name: "RecruitmentsListPage",
-  components: {CreateRecruitmentProcess},
+  components: { RecruitmentCard, CreateRecruitmentProcess },
   data() {
     return {
-      title: '',
-      description: '',
-      recruitmentProcesses: null,
+      recruitmentProcesses: [],
       recruitmentProcessService: new RecruitmentApiService(),
       createRecruitmentProcessDialog: false,
-    }
+      page: 1,
+      pageSize: 8,
+      searchTerm: '',
+      filteredRecruitmentProcesses: [],
+    };
   },
   created() {
     const userStore = useUserStore();
-    const companyId = userStore.user.company.id
-    this.recruitmentProcessService.getRecruitmentProcessesByCompanyId(companyId).then((response) => {
-      this.recruitmentProcesses = response.data;
-    }).catch((error) => {
-      console.log(error);
-    });
+    const companyId = userStore.user.company.id;
+    this.fetchRecruitmentProcesses(companyId);
+  },
+  computed: {
+    displayedRecruitmentProcesses() {
+      const startIndex = (this.page - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.filteredRecruitmentProcesses.slice(startIndex, endIndex);
+    }
   },
   methods: {
     openCreateRecruitmentProcess() {
-      this.createRecruitmentProcessDialog = !this.createRecruitmentProcessDialog;
+      this.createRecruitmentProcessDialog = true;
     },
+    fetchRecruitmentProcesses(companyId) {
+      this.recruitmentProcessService
+          .getRecruitmentProcessesByCompanyId(companyId)
+          .then((response) => {
+            this.recruitmentProcesses = response.data.reverse();
+            this.filteredRecruitmentProcesses = this.recruitmentProcesses; // Inicialmente mostrar todos
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
+    handlePostCreated() {
+      const userStore = useUserStore();
+      const companyId = userStore.user.company.id;
+      this.fetchRecruitmentProcesses(companyId);
+      this.createRecruitmentProcessDialog = false;
+    },
+    handlePageChange(event) {
+      console.log('Page change event:', event);
+      this.page = event.page + 1;
+    },
+    confirmSearch() {
+      if (!this.searchTerm) {
+        this.filteredRecruitmentProcesses = this.recruitmentProcesses;
+      } else {
+        this.filteredRecruitmentProcesses = this.recruitmentProcesses.filter(recruitmentProcess =>
+            recruitmentProcess.jobPost.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            recruitmentProcess.jobPost.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+      }
+      this.page = 1;
+    }
   }
-}
-
+};
 </script>

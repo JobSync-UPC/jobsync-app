@@ -127,7 +127,7 @@ export default  {
         description: this.description,
         country: this.country,
         address: this.address,
-        logoUrl: 'https://cdn.worldvectorlogo.com/logos/acme-1.svg',
+        logoUrl: 'https://i.pinimg.com/originals/af/f2/16/aff216eb233cd9fdb730f8f3e16159a7.jpg',
         website: this.website,
         industry: this.industry,
       };

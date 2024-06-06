@@ -70,6 +70,9 @@ export default {
             detail: "Logged in",
             life: 2000
           });
+
+          this.$emit('logged-in');
+
           this.$router.push("/")
         })
         .catch(err => this.$toast.add({

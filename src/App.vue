@@ -59,8 +59,10 @@
   </pv-toolbar>
 
 
-  <div class="container mx-auto py-8">
-    <RouterView />
+  <div class="container mx-auto py-8 px-2">
+    <RouterView
+        @logged-in="handleUser"
+    />
   </div>
 
   <pv-dialog v-model:visible="userOptions" :header="greeting()"
@@ -187,6 +189,10 @@ export default {
         return this.$t('general.hello') + ", " + this.user.firstname;
       }
     },
+    handleUser() {
+      const userStore = useUserStore();
+      this.user = userStore.user;
+    }
   }
 }
 </script>
