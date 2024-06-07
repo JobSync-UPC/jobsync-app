@@ -7,6 +7,7 @@
             class="w-full"
             severity="success"
             :label="$t('recruitment.dashboard.add-phase-lbl')"
+            @click="openNewPhaseDialog"
         />
         <pv-button
             class="w-full"
@@ -23,17 +24,30 @@
       </div>
       <div class="grid gap-2">
         <h1 class="text-2xl font-bold uppercase text-primary">{{ $t('recruitment.dashboard.phases-title') }}</h1>
-        <div class="grid gap-4">
+        <div class="grid md:flex gap-4">
           <recruitment-phase-card
-              v-for="phase in recruitment.recruitmentPhases"
+              :phase="phases[0]"
+              :bgColor="bgColors[0]"
+              :bgColorDark="bgColorsDark[0]"
+          />
+          <recruitment-phase-card
+              v-for="(phase, index) in phases.slice(1)"
               :key="phase.id"
               :phase="phase"
+              :bgColor="bgColors[1]"
+              :bgColorDark="bgColorsDark[1]"
           />
         </div>
       </div>
     </div>
 
-
+    <pv-dialog v-model:visible="newPhaseDialog"
+               :header="$t('recruitment.dashboard.add-phase-lbl')"
+               modal :dismissableMask="true"
+               class="w-full md:w-1/3">
+      <create-recruitment-phase-form :recruitment-process-id="recruitment.id"
+                                     @createdPhase="updateRecruitment" />
+    </pv-dialog>
     <pv-dialog v-model:visible="deleteRecruitmentDialog"
                :header="recruitment.enabled ? $t('recruitment.dashboard.finish-recruitment'):$t('recruitment.dashboard.reopen')"
                modal :dismissableMask="true"
@@ -46,7 +60,7 @@
                :header="$t('edit-jobPost')"
                modal :dismissableMask="true"
                class="w-full md:w-1/3">
-      <edit-jobpost-form
+      <edit-jobPost-form
           :jobPost="recruitment.jobPost"
           @updatedJobPost="updateRecruitment" />
     </pv-dialog>
@@ -63,21 +77,39 @@ import RecruitmentPhaseCard from "../components/recruitment-phase-card.component
 import {useUserStore} from "../../shared/store/user-store.store.js";
 import {ApplicationsService} from "../../shared/services/applications.service.js";
 import FinishReopenRecruitmentDialog from "../components/finish-reopen-recruitment.component.vue";
+import EditJobPostForm from "../components/edit-jobpost.component.vue";
+import CreateRecruitmentPhaseForm from "../components/create-recruitment-phase.component.vue";
 import EditJobpostForm from "../components/edit-jobpost.component.vue";
 
 export default {
   name: "recruitment-dashboard",
-  components: {EditJobpostForm, FinishReopenRecruitmentDialog, RecruitmentPhaseCard, RecruitmentCard},
+  components: {
+    EditJobPostForm,
+    CreateRecruitmentPhaseForm,
+    FinishReopenRecruitmentDialog,
+    RecruitmentPhaseCard,
+    RecruitmentCard
+  },
   data() {
     return {
       recruitmentApi: new RecruitmentApiService(),
       applicationsApi: new ApplicationsService(),
       recruitment: null,
+      phases: [],
       applicants: null,
       newPhaseTitle: '',
       newPhaseDescription: '',
       deleteRecruitmentDialog: false,
-      editJobPostDialog: false
+      editJobPostDialog: false,
+      newPhaseDialog: false,
+      bgColors: [
+        'bg-lime-100',
+        'bg-indigo-100'
+      ],
+      bgColorsDark:[
+        'dark:bg-cyan-900',
+        'dark:bg-gray-900'
+      ]
     }
   },
   created() {
@@ -89,6 +121,9 @@ export default {
     },
     openEditJobPostDialog() {
       this.editJobPostDialog = true;
+    },
+    openNewPhaseDialog() {
+      this.newPhaseDialog = true;
     },
     updateRecruitment() {
       this.recruitment = null;
@@ -105,6 +140,7 @@ export default {
               this.recruitmentApi.getRecruitmentProcessById(recruitmentId)
                   .then(response => {
                     this.recruitment = response.data
+                    this.phases = this.recruitment.recruitmentPhases;
                     this.applicationsApi.getApplicationsRecruitmentProcessId(recruitmentId)
                         .then(response => {
                           this.applicants = response.data;
@@ -114,6 +150,7 @@ export default {
           });
       this.deleteRecruitmentDialog = false;
       this.editJobPostDialog = false;
+      this.newPhaseDialog = false;
     }
 
   }

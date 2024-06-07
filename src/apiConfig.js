@@ -9,3 +9,4 @@ export const recruitersBaseUrl = `${baseUrl}recruiters`;
 export const jobPostsBaseUrl = `${baseUrl}job-posts`;
 export const recruitmentProcessesBaseUrl = `${baseUrl}recruitment-processes`;
 export const applicationsUrl = `${baseUrl}applications`;
+export const phasesBasUrl = `${baseUrl}recruitment-phases`;

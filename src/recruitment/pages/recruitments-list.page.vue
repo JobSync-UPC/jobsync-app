@@ -75,7 +75,7 @@ export default {
           .getRecruitmentProcessesByCompanyId(companyId)
           .then((response) => {
             this.recruitmentProcesses = response.data.reverse();
-            this.filteredRecruitmentProcesses = this.recruitmentProcesses; // Inicialmente mostrar todos
+            this.filteredRecruitmentProcesses = this.recruitmentProcesses;
           })
           .catch((error) => {
             console.error(error);

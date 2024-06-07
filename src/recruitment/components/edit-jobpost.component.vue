@@ -41,7 +41,7 @@
 import {JobPostApiService} from "../services/jobpost.service.js";
 
 export default {
-  name: "edit-jobpost-form",
+  name: "edit-jobPost-form",
   props: {
     jobPost: {
       type: Object,
