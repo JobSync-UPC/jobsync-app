@@ -2,9 +2,11 @@
   <div>
     <h1 class="text-2xl text-primary font-bold py-2">{{$t('recruitment.title')}}</h1>
     <div class="flex justify-between items-center">
-      <pv-button outlined @click="openCreateRecruitmentProcess">
-        {{$t('organization-profile.new-recruitment-btn-label')}}
-      </pv-button>
+      <pv-button @click="openCreateRecruitmentProcess"
+                 severity="success"
+                 icon="pi pi-plus"
+                 :label = "$t('organization-profile.new-recruitment-btn-label')"
+      />
       <div class="flex items-center">
         <input type="text" v-model="searchTerm" @keyup.enter="confirmSearch" placeholder="Search..." class="border p-2 rounded"/>
         <pv-button icon="pi pi-search" aria-label="Search" outlined @click="confirmSearch" />
@@ -12,7 +14,9 @@
     </div>
     <div class="grid md:grid-cols-2 gap-4 py-4">
       <div v-for="recruitmentProcess in displayedRecruitmentProcesses" :key="recruitmentProcess.id">
-        <recruitment-card :recruitment="recruitmentProcess" />
+        <router-link :to="`recruitment/${recruitmentProcess.id}/dashboard`">
+          <recruitment-card :recruitment="recruitmentProcess" />
+        </router-link>
       </div>
     </div>
     <pv-paginator
@@ -31,9 +35,9 @@
 
 
 <script>
-import CreateRecruitmentProcess from "../components/create-recruitment-process.vue";
+import CreateRecruitmentProcess from "../components/create-recruitment-process.component.vue";
 import { useUserStore } from "../../shared/store/user-store.store.js";
-import { RecruitmentApiService } from "../services/recruitment.service.js";
+import { RecruitmentApiService } from "../../shared/services/recruitment.service.js";
 import RecruitmentCard from "../components/recruitment-card.component.vue";
 
 export default {
@@ -84,7 +88,6 @@ export default {
       this.createRecruitmentProcessDialog = false;
     },
     handlePageChange(event) {
-      console.log('Page change event:', event);
       this.page = event.page + 1;
     },
     confirmSearch() {

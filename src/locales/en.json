@@ -3,6 +3,28 @@
     "go-back-btn-label": "Go back",
     "hello": "Hello"
   },
+  "disable-jobpost": "Disable post",
+  "enable-jobpost": "Enable post",
+  "accept": "Accept",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "close": "Close",
+  "create": "Create",
+  "back": "Back",
+  "next": "Next",
+  "finish": "Finish",
+  "search": "Search",
+  "upload": "Upload",
+  "download": "Download",
+  "send": "Send",
+  "yes": "Yes",
+  "no": "No",
+  "view": "View",
+  "loading": "Loading...",
+  "edit-jobPost": "Edit job post",
   "navbar": {
     "home": "Home",
     "applications": "Applications",
@@ -114,8 +136,10 @@
   "recruitment-card": {
     "start-date-label": "Start Date",
     "recruitment-status-label": "Status",
-    "job-post-status-label": "Job Post Status",
-    "organizer-label": "Organizer"
+    "job-post-status-label": "Post Status",
+    "organizer-label": "Organizer",
+    "open": "Open",
+    "closed": "Closed"
   },
   "recruitment": {
     "title": "Recruitment Processes",
@@ -136,10 +160,15 @@
     },
     "dashboard": {
       "add-phase-lbl": "Add phase",
+      "edit-post": "Edit post",
+      "finish-recruitment": "Finish recruitment",
+      "reopen": "Reactivate recruitment",
+      "type_1": "Type",
+      "type_2": "to continue",
       "add-candidates-lbl": "Add candidates",
       "recruitment-settings-lbl": "Settings",
       "candidates-counter": " Candidates",
-      "phases-counter": " Phases",
+      "phases-title": "Phases",
       "candidates-table": {
         "phases-header": "Recruitment phases",
         "phase-lbl": "Phase",

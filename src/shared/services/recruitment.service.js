@@ -16,4 +16,7 @@ export class RecruitmentApiService {
   getRecruitmentProcessById(recruitmentProcessId) {
     return http.get(`/${recruitmentProcessId}`);
   }
+  updateEnabledRecruitmentProcess(recruitmentProcessId) {
+    return http.put(`/update-enabled/${recruitmentProcessId}`);
+  }
 }
