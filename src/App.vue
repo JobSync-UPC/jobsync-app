@@ -61,7 +61,7 @@
 
   <div class="container mx-auto py-8 px-2">
     <RouterView
-        @logged-in="handleUser"
+        v-on:loggedIn="handleUser"
     />
   </div>
 
@@ -192,6 +192,7 @@ export default {
     handleUser() {
       const userStore = useUserStore();
       userStore.updateUser();
+      console.log(userStore.user);
       this.user = userStore.user;
     }
   }

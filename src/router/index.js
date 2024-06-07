@@ -16,6 +16,7 @@ import RecruitmentsListPage from "../recruitment/pages/recruitments-list.page.vu
 import RecruiterInitPage from "../organizations/pages/recruiter-init.page.vue";
 import OrganizationCreationForm from "../organizations/components/organization-creation-form.component.vue";
 import OrganizationProfileComponent from "../organizations/pages/organization-profile.component.vue";
+import RecruitmentDashboardComponent from "../recruitment/pages/recruitment-dashboard.component.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,11 +40,11 @@ const router = createRouter({
       { path: '/company-create', name: 'Company creation page', component:OrganizationCreationForm , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/company-profile', name: 'Company profile page', component:OrganizationProfileComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/recruitments', name: 'Recruitments management', component:RecruitmentsListPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
-
+      { path: '/recruitment/:id/dashboard', name: 'Recruitment process dashboard', component:RecruitmentDashboardComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
 
 
       // Support
-      { path: '/:pathMatch(.*)*', name: 'Error 404', component: PageNotFoundComponent, meta: { requiresAuth: true } },
+      { path: '/:pathMatch(.*)*', name: '404', component: PageNotFoundComponent, meta: { requiresAuth: true } },
       { path: '/', redirect: '/home'},
   ]
 });

@@ -71,7 +71,7 @@ export default {
             life: 2000
           });
 
-          this.$emit('logged-in');
+          this.$emit('loggedIn');
 
           this.$router.push("/")
         })
