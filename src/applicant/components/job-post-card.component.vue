@@ -30,9 +30,6 @@
               {{ $t('recruitment-card.closed') }} 🔴
             </span>
           </li>
-          <li>
-            {{ recruitment.description }}
-          </li>
         </ul>
       </div>
     </div>
@@ -44,7 +41,7 @@
 
 <script>
 export default {
-  name: "recruitment-card",
+  name: "jobPost-card",
   props: {
     recruitment: {
       type: Object,

@@ -15,4 +15,7 @@ export class ApplicationsService {
     updateApplicationPhase(applicationId, phaseId) {
         return http.put(`/update-phase/${applicationId}?newPhaseId=${phaseId}`);
     }
+    applyToJob(applicantId, recruitmentProcessId) {
+        return http.post(`/apply`, {applicantId, recruitmentProcessId});
+    }
 }

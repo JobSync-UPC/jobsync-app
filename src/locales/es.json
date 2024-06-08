@@ -3,6 +3,7 @@
     "go-back-btn-label": "Volver atrás",
     "hello": "Hola"
   },
+  "showing": "Mostrando",
   "disable-jobpost": "Desactivar publicación",
   "enable-jobpost": "Activar publicación",
   "accept": "Aceptar",
@@ -25,6 +26,15 @@
   "view": "Ver",
   "loading": "Cargando...",
   "edit-jobPost": "Editar publicación",
+  "apply-to-job": "Postular",
+  "applied": "Postulado",
+  "confirm-application": "Confirmar postulación",
+  "confirm-application-msg": "¿Estás seguro de que deseas postularte a este trabajo?",
+  "application-sent": "Postulación enviada",
+  "application-sent-msg": "Tu postulación ha sido enviada con éxito",
+  "application-sent-msg-2": "El reclutador se pondrá en contacto contigo si tu perfil es seleccionado",
+  "application-sent-msg-3": "¡Buena suerte!",
+  "already-applied": "Ya te has postulado anteriormente a este trabajo",
   "navbar": {
     "home": "Inicio",
     "applications": "Postulaciones",

@@ -9,14 +9,14 @@ import PasswordRecoveryComponent from "../authentication/pages/password-recovery
 import PageNotFoundComponent from "../shared/pages/page-not-found.component.vue";
 import ProfileManagement from "../authentication/pages/profile-management.vue";
 import SettingsComponent from "../settings/pages/settings.component.vue";
-import JobsPostsPage from "../applicants/pages/jobs-posts.page.vue";
-import ApplicantProfilePage from "../applicants/pages/applicant-profile.page.vue";
-import ApplicationsPage from "../applications/pages/applications.page.vue";
-import RecruitmentsListPage from "../recruitment/pages/recruitments-list.page.vue";
+import JobsPostsPage from "../applicant/pages/jobs-posts.page.vue";
+import ApplicantProfilePage from "../applicant/pages/applicant-profile.page.vue";
+import RecruitmentsListPage from "../recruiter/pages/recruitments-list.page.vue";
 import RecruiterInitPage from "../organizations/pages/recruiter-init.page.vue";
 import OrganizationCreationForm from "../organizations/components/organization-creation-form.component.vue";
 import OrganizationProfileComponent from "../organizations/pages/organization-profile.component.vue";
-import RecruitmentDashboardComponent from "../recruitment/pages/recruitment-dashboard.component.vue";
+import RecruitmentDashboardComponent from "../recruiter/pages/recruitment-dashboard.component.vue";
+import ApplicationsPage from "../applicant/pages/applications.page.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,12 +33,12 @@ const router = createRouter({
       // Applicants
       { path: '/jobs', name: 'Job posts', component: JobsPostsPage, meta: { requiresAuth: true, requiresCandidate: true, requiresApplicant: true } },
       { path: '/profile', name: 'Applicant Profile', component: ApplicantProfilePage, meta: { requiresAuth: true, requiresApplicant: true } },
-      { path: '/applications', name: 'Candidate Applications', component:ApplicationsPage , meta: { requiresAuth: true, requiresApplicant: true } },
+      { path: '/applications', name: 'Applications Page', component: ApplicationsPage, meta: { requiresAuth: true, requiresApplicant: true } },
 
       // Recruiters
       { path: '/init', name: 'Recruiters without company init page', component:RecruiterInitPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
       { path: '/company-create', name: 'Company creation page', component:OrganizationCreationForm , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
-      { path: '/company-profile', name: 'Company profile page', component:OrganizationProfileComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: false} },
+      { path: '/company-profile', name: 'Company profile page', component:OrganizationProfileComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
       { path: '/recruitments', name: 'Recruitments management', component:RecruitmentsListPage , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
       { path: '/recruitment/:id/dashboard', name: 'Recruitment process dashboard', component:RecruitmentDashboardComponent , meta: { requiresAuth: true, requiresRecruiter: true, requiresCompany: true} },
 
@@ -65,17 +65,17 @@ function handleApplicant(userStore, to, next) {
 
 // Function to handle routing for recruiters
 function handleRecruiter(userStore, to, next) {
-
     // If the router requires an applicant
     if (to.meta.requiresApplicant) {
         next('/');
     }
+    // If the route does not require a company and the user has a company, redirect to recruitments
+    else if (!to.meta.requiresCompany && userStore.hasCompany) {
+        next('/recruitments');
+    }
     // If the route requires a company and the user does not have a company, redirect to init
     else if (to.meta.requiresCompany && !userStore.hasCompany) {
         next('/init');
-    }
-    else if (to.path === '/init' && userStore.hasCompany) {
-        next('/recruitments');
     }
     // If the user is trying to access the home path, redirect based on whether they have a company
     else if (to.path === '/home') {

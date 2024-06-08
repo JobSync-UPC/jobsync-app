@@ -3,6 +3,7 @@
     "go-back-btn-label": "Go back",
     "hello": "Hello"
   },
+  "showing": "Showing",
   "disable-jobpost": "Disable post",
   "enable-jobpost": "Enable post",
   "accept": "Accept",
@@ -25,6 +26,15 @@
   "view": "View",
   "loading": "Loading...",
   "edit-jobPost": "Edit job post",
+  "apply-to-job": "Apply",
+  "applied": "Applied",
+  "confirm-application": "Confirm Application",
+  "confirm-application-msg": "Are you sure you want to apply to this job?",
+  "application-sent": "Application sent",
+  "application-sent-msg": "Your application has been sent successfully",
+  "application-sent-msg-2": "You will receive an email with the details of your application",
+  "application-sent-msg-3": "You can also check the status of your application in the applications section",
+  "already-applied": "You have already applied to this job",
   "navbar": {
     "home": "Home",
     "applications": "Applications",

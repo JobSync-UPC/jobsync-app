@@ -29,6 +29,7 @@
               :phase="phases[0]"
               :bgColor="bgColors[0]"
               :bgColorDark="bgColorsDark[0]"
+              :isFirstPhase="true"
           />
           <recruitment-phase-card
               v-for="(phase, index) in phases.slice(1)"
@@ -36,6 +37,8 @@
               :phase="phase"
               :bgColor="bgColors[1]"
               :bgColorDark="bgColorsDark[1]"
+              :isFirstPhase="false"
+              @update="updateRecruitment"
           />
         </div>
       </div>

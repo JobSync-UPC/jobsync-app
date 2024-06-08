@@ -19,4 +19,7 @@ export class RecruitmentApiService {
   updateEnabledRecruitmentProcess(recruitmentProcessId) {
     return http.put(`/update-enabled/${recruitmentProcessId}`);
   }
+  getAllRecruitmentProcessesWithActiveJobPost() {
+    return http.get(`/active`);
+  }
 }

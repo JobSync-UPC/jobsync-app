@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="recruitmentProcesses">
     <h1 class="text-2xl text-primary font-bold py-2">{{$t('recruitment.title')}}</h1>
     <div class="flex justify-between items-center">
       <pv-button @click="openCreateRecruitmentProcess"
@@ -30,6 +30,9 @@
       <create-recruitment-process @post-created="handlePostCreated"/>
     </pv-dialog>
   </div>
+  <div v-else>
+    <pv-spinner />
+  </div>
 </template>
 
 
@@ -45,7 +48,7 @@ export default {
   components: { RecruitmentCard, CreateRecruitmentProcess },
   data() {
     return {
-      recruitmentProcesses: [],
+      recruitmentProcesses: null,
       recruitmentProcessService: new RecruitmentApiService(),
       createRecruitmentProcessDialog: false,
       page: 1,

@@ -27,4 +27,7 @@ export class RecruitmentPhaseApiService {
     getPhaseById (phaseId) {
         return http.get(`/${phaseId}`)
     }
+    deletePhase (phaseId) {
+        return http.delete(`/${phaseId}`)
+    }
 }

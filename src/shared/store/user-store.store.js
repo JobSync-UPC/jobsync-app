@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {UsersApiService} from "../services/users.service.js";
+import { UsersApiService } from "../services/users.service.js";
 
 export const useUserStore = defineStore('auth', {
   state: () => ({
@@ -8,8 +8,6 @@ export const useUserStore = defineStore('auth', {
     role: null,
     hasCompany: false,
     token: null,
-
-    usersApi: new UsersApiService(),
   }),
   actions: {
     login(data) {
@@ -33,25 +31,25 @@ export const useUserStore = defineStore('auth', {
         this.logout();
         return;
       }
+      const usersApi = new UsersApiService();
 
-      this.usersApi.getById(this.user.id)
+      usersApi.getById(this.user.id)
           .then((response) => {
             this.user = response.data;
             this.role = response.data.role;
             this.hasCompany = !!response.data.company;
-      }).catch((error) => {
+
+            // Persist updated user info to localStorage
+            localStorage.setItem('auth', JSON.stringify({
+              isAuthenticated: this.isAuthenticated,
+              user: this.user,
+              role: this.role,
+              hasCompany: this.hasCompany,
+              token: this.token
+            }));
+          }).catch((error) => {
         console.error(error);
       });
-
-      localStorage.setItem('auth', JSON.stringify(
-          {
-            isAuthenticated: this.isAuthenticated,
-            user: this.user,
-            role:  this.role,
-            hasCompany: this.hasCompany,
-            token: this.token
-          }
-      ));
     },
     logout() {
       localStorage.removeItem("auth");

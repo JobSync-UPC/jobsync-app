@@ -48,12 +48,14 @@
                 />
               </div>
             </form>
-            <pv-button type="submit"
-                       severity="danger"
-                       :enabled="!this.loading"
-                       :label="this.loading ? $t('loading') : $t('delete')"
-                       @click="deletePhase(phase)"
-            />
+            <div class="grid w-full" v-if="isFirstPhase===false">
+              <pv-button type="submit"
+                         severity="danger"
+                         :enabled="!this.loading"
+                         :label="this.loading ? $t('loading') : $t('delete')"
+                         @click="deletePhase(phase)"
+              />
+            </div>
           </div>
         </pv-dialog>
       </div>
@@ -88,6 +90,8 @@
 
 
 <script>
+import {RecruitmentPhaseApiService} from "../services/phases.service.js";
+
 export default {
   name: "recruitment-phase-card",
   props: {
@@ -102,6 +106,10 @@ export default {
     bgColorDark: {
       type: String,
       required: true
+    },
+    isFirstPhase: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -113,6 +121,7 @@ export default {
       title:'',
       description: '',
       loading: false,
+      phaseService: new RecruitmentPhaseApiService()
     }
   },
   created() {
@@ -126,22 +135,79 @@ export default {
       );
       this.candidateDialog = true;
     },
-    updatePhase(phase) {
+    updatePhase() {
       this.loading = true;
 
+      if (this.phase.title === '' || this.title === '') {
+        this.loading = false;
+        this.$toast.add({
+          severity: "error",
+          summary: "JobSync",
+          detail: "Title is required",
+          life: 2000
+        });
+        return;
+      }
+
+      const newPhase = {
+        id: this.phase.id,
+        title: this.title,
+        description: this.description,
+        startDate: this.phase.startDate,
+        endDate: this.phase.endDate,
+        recruitmentProcessId: this.phase.recruitmentProcessId
+      }
+
+      this.phaseService.updatePhase(newPhase.id,newPhase)
+          .then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "JobSync",
+              detail: "Created",
+              life: 2000
+            });
+            this.$emit('update');
+          })
+          .catch((error) => {
+            this.$toast.add({
+              severity: "error",
+              summary: "JobSync",
+              detail: "There was an error. Please try again later: " + error.message,
+              life: 2000
+            });
+            console.log(error)
+          });
 
       this.loading = false;
     },
-    deletePhase(phase) {
+    deletePhase() {
       this.loading = true;
 
+      if (this.isFirstPhase === true) {
+        return;
+      }
 
-
+      this.phaseService.deletePhase(this.phase.id)
+          .then(() => {
+            this.$toast.add({
+              severity: "success",
+              summary: "JobSync",
+              detail: "Deleted",
+              life: 2000
+            });
+            this.$emit('update');
+          })
+          .catch((error) => {
+            this.$toast.add({
+              severity: "error",
+              summary: "JobSync",
+              detail: "There was an error. Please try again later: " + error.message,
+              life: 2000
+            });
+            console.log(error)
+          });
       this.loading = false;
     }
   }
 }
 </script>
-
-<style scoped>
-</style>
