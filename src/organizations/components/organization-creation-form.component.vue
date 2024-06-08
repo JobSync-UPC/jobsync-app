@@ -69,7 +69,7 @@ import {CountriesApiService} from "../../shared/services/countries.service.js";
 import {useUserStore} from "../../shared/store/user-store.store.js";
 import {CompaniesService} from "../service/companies.service.js";
 import {getUser} from "../../shared/services/user.js";
-import {ApplicantsService} from "../../applicants/service/applicants.service.js";
+import {ApplicantsService} from "../../applicant/service/applicants.service.js";
 
 export default  {
   name: "organization-creation-form",
@@ -134,13 +134,20 @@ export default  {
       const recruiterId = userStore.user.id;
 
       this.companiesApi.createCompany(companyData, recruiterId)
-        .then(() => {
-          this.$emit('company-created');
-          this.$toast.add({severity: 'success', summary: 'Success', detail: 'Company created successfully', life: 1000});
-
+        .then(async () => {
           const userStore = useUserStore();
+          userStore.updateUser();
 
-          this.$router.push('/');
+          this.$emit('company-created');
+          this.$toast.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Company created successfully',
+            life: 1000
+          });
+
+          this.$router.push('/recruitments');
+          location.reload();
         })
         .catch((e) => {
           this.$toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create company: ' + e.response.data, life: 1000});

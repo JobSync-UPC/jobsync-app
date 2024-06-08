@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex items-center justify-center" v-if="this.user">
     <div class="bg-white dark:bg-black shadow-xl rounded px-8 pt-6 pb-8">
       <div class="flex flex-col space-y-6">
         <div>
@@ -36,7 +36,7 @@
                   required
                   id="last-name"
                   class="w-full"
-                  v-model="lastName"
+                  v-model="lastname"
                   :placeholder="$t('auth.last-name')"
                   type="text"
               />
@@ -65,10 +65,13 @@
               />
             </div>
           </div>
-          <pv-button type="submit" :label="$t('auth.save-changes')" outlined/>
+          <pv-button type="submit" :label="$t('auth.save-changes')" outlined />
         </form>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <pv-spinner />
   </div>
 </template>
 
@@ -82,7 +85,7 @@ export default {
   data() {
     return {
       firstname: '',
-      lastName: '',
+      lastname: '',
       phoneNumber: '',
       selectedCountry: '',
       profilePictureUrl: '',
@@ -97,22 +100,23 @@ export default {
   created() {
     this.loadCountries();
 
-
     this.userApi.getById(getUser().id).then(
         response => {
           this.user = response.data;
-
-          this.firstname = this.user.firstname;
-          this.lastName = this.user.lastname;
-          this.phoneNumber = this.user.phoneNumber;
-          this.selectedCountry = this.user.country;
-          this.profilePictureUrl = this.user.profilePictureUrl;
+          this.updateForm();
         }
     ).catch(e => {
       console.log(e);
     });
   },
   methods: {
+    updateForm () {
+      this.firstname = this.user.firstname;
+      this.lastname = this.user.lastname;
+      this.phoneNumber = this.user.phoneNumber;
+      this.selectedCountry = this.user.country;
+      this.profilePictureUrl = this.user.profilePictureUrl;
+    },
     loadCountries() {
       this.countriesApi.getCountries()
           .then(response => {
@@ -129,8 +133,8 @@ export default {
     saveChanges(event) {
       event.preventDefault();
 
-      this.user.firstname = this.firstName;
-      this.user.lastname = this.lastName;
+      this.user.firstname = this.firstname;
+      this.user.lastname = this.lastname;
       this.user.phoneNumber = this.phoneNumber;
       this.user.country = this.selectedCountry;
 
@@ -152,8 +156,27 @@ export default {
             });
       }
 
+      this.userApi.updateById(this.user.id, this.user)
+          .then(response => {
+            this.$toast.add({
+              severity: "success",
+              summary: "Success",
+              detail: "User updated successfully",
+              life: 1000
+            });
+          })
+          .catch(e => {
+            this.$toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: "Error updating user",
+              life: 1000
+            });
+          });
+
       const userStore = useUserStore();
       userStore.updateUser();
+      this.updateForm();
     },
   }
 }
