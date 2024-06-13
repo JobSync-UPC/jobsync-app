@@ -1,12 +1,15 @@
 <template>
   <div :class="[
       'max-h-container',
-      'border',
       'rounded-xl',
       'px-4',
-      'py-4',
-      'w-72',
+      'py-2',
+      'w-full',
       'space-y-2',
+      'hover:cursor-pointer',
+      'hover:scale-95',
+      'hover:border-primary',
+      'duration-200',
       bgColor,
       bgColorDark
       ]"
@@ -59,31 +62,37 @@
           </div>
         </pv-dialog>
       </div>
-      <div>
-        <h1 v-if="candidates.length === 0">{{ $t('recruitment.no-candidates-found-message')}}</h1>
-      </div>
-      <div v-for="candidate in phase.candidates" :key="candidate.id">
-        <div @click="openCandidateDialog(candidate.id)"
-             class="flex border px-2 py-4 rounded-lg bg-white hover:scale-95 duration-100 items-center space-x-2">
-          <img class="rounded-full w-12 h-12 object-cover"
-               :src="candidate.user.profileImageUrl"
-               :alt="candidate.user.name + ' profile picture'"/>
-          <p>{{ candidate.user.name }}</p>
-        </div>
-      </div>
-      <pv-dialog v-model:visible="candidateDialog" modal>
-        <p>
-          {{ currentCandidate.user.name }}
-          <br>
-          Building...
-        </p>
-        <template #footer>
-          <pv-button label="Okay" icon="pi pi-times" @click="candidateDialog = false" text />
-        </template>
-      </pv-dialog>
+<!--      <div>-->
+<!--        <h1 v-if="this.applications.length === 0">{{ $t('no-applications-found-message')}}</h1>-->
+<!--      </div>-->
+<!--      <div v-for="application in applications" :key="application.id">-->
+<!--        <div @click="openCandidateDialog(application.id)"-->
+<!--             class="flex border px-2 py-4 rounded-lg bg-slate-50 dark:bg-slate-800 hover:scale-95 duration-100 hover:cursor-pointer items-center space-x-2">-->
+<!--          <img class="rounded-full w-12 h-12 object-cover"-->
+<!--               :src="application.applicant.profilePictureUrl"-->
+<!--               :alt="application.applicant.firstname + ' profile picture'"/>-->
+<!--          <div class="grid">-->
+<!--            <p class="font-medium">{{ application.applicant.firstname }} {{ application.applicant.lastname }}</p>-->
+<!--            <p class="text-xs">{{$t('application-date')}}: {{ formatDate(application.application_date) }}</p>-->
+<!--          </div>-->
+
+<!--        </div>-->
+<!--      </div>-->
+<!--      <pv-dialog v-model:visible="candidateDialog" modal>-->
+<!--        <p>-->
+<!--          {{ currentCandidate.user.name }}-->
+<!--          <br>-->
+<!--          Building...-->
+<!--        </p>-->
+<!--        <template #footer>-->
+<!--          <pv-button label="Okay" icon="pi pi-times" @click="candidateDialog = false" text />-->
+<!--        </template>-->
+<!--      </pv-dialog>-->
     </div>
     <div v-else>
-      <pv-spinner />
+      <div class="flex items-center justify-center">
+        <pv-spinner />
+      </div>
     </div>
   </div>
 </template>
@@ -110,18 +119,17 @@ export default {
     isFirstPhase: {
       type: Boolean,
       default: false
-    }
+    },
   },
   data() {
     return {
       phaseDialog: false,
       candidateDialog: false,
       currentCandidate: {},
-      candidates: [],
       title:'',
       description: '',
       loading: false,
-      phaseService: new RecruitmentPhaseApiService()
+      phaseService: new RecruitmentPhaseApiService(),
     }
   },
   created() {
@@ -129,12 +137,6 @@ export default {
     this.description = this.phase.description;
   },
   methods: {
-    openCandidateDialog(candidateId) {
-      this.currentCandidate = this.phase.candidates.find(
-          candidate => candidate.id === candidateId
-      );
-      this.candidateDialog = true;
-    },
     updatePhase() {
       this.loading = true;
 
@@ -163,10 +165,13 @@ export default {
             this.$toast.add({
               severity: "success",
               summary: "JobSync",
-              detail: "Created",
+              detail: "Edited",
               life: 2000
             });
-            this.$emit('update');
+            this.phase.title = this.title;
+            this.phase.description = this.description;
+            this.phaseDialog = false;
+            this.candidateDialog = false;
           })
           .catch((error) => {
             this.$toast.add({
@@ -175,7 +180,6 @@ export default {
               detail: "There was an error. Please try again later: " + error.message,
               life: 2000
             });
-            console.log(error)
           });
 
       this.loading = false;
@@ -207,7 +211,7 @@ export default {
             console.log(error)
           });
       this.loading = false;
-    }
+    },
   }
 }
 </script>

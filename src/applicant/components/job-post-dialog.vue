@@ -49,7 +49,9 @@
     </div>
   </div>
   <div v-else>
-    <pv-spinner />
+    <div class="flex items-center justify-center">
+      <pv-spinner />
+    </div>
   </div>
 
   <pv-dialog v-model:visible="isDialogVisible" header="" modal>
@@ -99,7 +101,7 @@ export default {
       this.applicationService.getApplicationsByApplicantId(applicantId).then(
           response => {
             const applications = response.data;
-            const hasApplied = applications.some(application => application.recruitmentProcessId === this.recruitmentProcess.id);
+            const hasApplied = applications.some(application => application.recruitmentProcess.id === this.recruitmentProcess.id);
 
             this.alreadyApplied = !!hasApplied;
           }
@@ -130,7 +132,7 @@ export default {
           }
       ).catch(e => {
         console.log(e)
-        this.$toast.add({severity: 'error', summary: "Error", detail: "There was an error. Try again later", life:2000});
+        this.$toast.add({severity: 'error', summary: "Error", detail: "There was an error. Try again later " + e.response, life:2000});
       })
           .finally(
               () => {

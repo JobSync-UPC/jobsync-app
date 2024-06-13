@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-center items-center">
-    <div class="flex bg-white dark:bg-black shadow-xl rounded px-8 pt-6 pb-8 w-1/2 justify-center items-center">
+  <div v-if="applicant!==null" class="flex justify-center items-center">
+    <div class="flex bg-white dark:bg-black shadow-xl rounded p-12 justify-center items-center">
       <div class="flex flex-col space-y-6">
         <div>
           <h1 class="text-center font-bold text-3xl">{{ $t('profile-settings.applicant-title') }}</h1>
@@ -53,6 +53,11 @@
           <pv-button @click="cancelChanges" severity="danger" :label="$t('profile-settings.discard-changes')" />
         </form>
       </div>
+    </div>
+  </div>
+  <div v-else>
+    <div class="flex items-center justify-center">
+      <pv-spinner />
     </div>
   </div>
 </template>
@@ -111,7 +116,6 @@ export default {
             life: 2000
           });
           this.cvFile= null;
-          this.updateApplicant();
         });
       }
       else {

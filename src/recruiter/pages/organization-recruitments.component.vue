@@ -147,7 +147,7 @@ export default {
               life: 4000
             });
           });
-    }
+    },
   }
 }
 

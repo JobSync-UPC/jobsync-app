@@ -27,7 +27,9 @@
     />
   </div>
   <div v-else>
-    <pv-spinner />
+    <div class="flex items-center justify-center">
+      <pv-spinner />
+    </div>
   </div>
 </template>
 

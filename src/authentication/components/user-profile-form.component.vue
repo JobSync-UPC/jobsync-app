@@ -16,7 +16,9 @@
         </div>
         <form v-on:submit="saveChanges($event)" class="flex flex-col space-y-3">
           <div class="justify-center flex items-center">
-            <pv-file-upload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @select="uploadProfilePicture" />
+            <pv-file-upload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000"
+                            @select="selectedFile"
+            />
           </div>
           <div class="grid grid-cols-2 items-end gap-4">
             <div>
@@ -71,7 +73,9 @@
     </div>
   </div>
   <div v-else>
-    <pv-spinner />
+    <div class="flex items-center justify-center">
+      <pv-spinner />
+    </div>
   </div>
 </template>
 
@@ -127,36 +131,54 @@ export default {
             this.countries.push("Error loading countries");
           })
     },
-    uploadProfilePicture(event) {
-      this.profilePictureFile = event.files[0]; // Save the file locally
-    },
-    saveChanges(event) {
-      event.preventDefault();
+    selectedFile(event) {
+      const file = event.files[0];
+      this.profilePictureFile = file;
 
-      this.user.firstname = this.firstname;
-      this.user.lastname = this.lastname;
-      this.user.phoneNumber = this.phoneNumber;
-      this.user.country = this.selectedCountry;
-
-      if (this.profilePictureFile !== null) {
-        console.log("Uploading profile picture");
-        this.userApi.changeProfilePicture(this.user.id, this.profilePictureFile)
-            .then(response => {
-              this.profilePictureUrl = response.data.profilePictureUrl;
-              console.log("Profile picture uploaded successfully");
-            })
-            .catch(e => {
-              console.error(e.response);
-              this.$toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: "Error uploading profile picture",
-                life: 1000
-              });
-            });
+      if (file) {
+        try {
+          this.profilePictureUrl = URL.createObjectURL(file);
+        } catch (error) {
+          this.$toast.add({
+            severity: "warn",
+            detail: "Error uploading file",
+            summary: error,
+            life: 2000
+          });
+        }
+      } else {
+        this.$toast.add({
+          severity: "warn",
+          detail: "Invalid file type",
+          summary: error.response.data.message,
+          life: 2000
+        });
       }
-
-      this.userApi.updateById(this.user.id, this.user)
+    },
+    uploadPicture(){
+      this.userApi.changeProfilePicture(this.user.id, this.profilePictureFile)
+          .then(response => {
+            this.profilePictureUrl = response.data.profilePictureUrl;
+            this.updateUser();
+          })
+          .catch(e => {
+            console.error(e.response);
+            this.$toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: "Error uploading profile picture",
+              life: 1000
+            });
+          });
+    },
+    updateUser(){
+      this.userApi.updateById(this.user.id, {
+        firstname: this.firstname,
+        lastname: this.lastname,
+        phoneNumber: this.phoneNumber,
+        profilePictureUrl: this.profilePictureUrl,
+        country: this.selectedCountry,
+      })
           .then(response => {
             this.$toast.add({
               severity: "success",
@@ -164,6 +186,8 @@ export default {
               detail: "User updated successfully",
               life: 1000
             });
+            const userStore = useUserStore();
+            userStore.updateUser();
           })
           .catch(e => {
             this.$toast.add({
@@ -173,6 +197,22 @@ export default {
               life: 1000
             });
           });
+    },
+    saveChanges(event) {
+      event.preventDefault();
+
+      this.user.firstname = this.firstname;
+      this.user.lastname = this.lastname;
+      this.user.phoneNumber = this.phoneNumber;
+      this.user.country = this.selectedCountry;
+      this.user.profilePicturUrl = this.profilePictureUrl;
+
+      if (this.profilePictureFile !== null) {
+        this.uploadPicture();
+      }
+      else {
+        this.updateUser();
+      }
 
       const userStore = useUserStore();
       userStore.updateUser();
