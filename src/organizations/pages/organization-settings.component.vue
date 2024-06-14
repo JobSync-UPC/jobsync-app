@@ -2,7 +2,6 @@
   <div>
     <pv-button
         rounded
-        outlined
         aria-label="Go back"
         @click="$router.back()"
     >
@@ -10,7 +9,7 @@
     </pv-button>
     <div class="flex justify-center items-center h-full">
       <div class="w-full max-w-xl py-4">
-        <organization-settings-form></organization-settings-form>
+        <organization-settings-form  current-organization=""/>
       </div>
     </div>
   </div>

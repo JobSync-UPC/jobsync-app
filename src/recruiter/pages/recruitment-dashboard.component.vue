@@ -5,21 +5,27 @@
       <div class="grid md:flex gap-4">
         <pv-button
             class="w-full"
-            severity="success"
+            severity="contrast"
             :label="$t('recruitment.dashboard.add-phase-lbl')"
-            @click="openNewPhaseDialog"
+            @click="this.newPhaseDialog = true"
         />
         <pv-button
             class="w-full"
-            severity="warning"
+            severity="warn"
             :label="$t('recruitment.dashboard.edit-post')"
-            @click="openEditJobPostDialog"
+            @click="this.editJobPostDialog = true"
+        />
+        <pv-button
+            class="w-full"
+            severity="help"
+            :label="automationLabel"
+            @click="this.automationDialog = true"
         />
         <pv-button
             class="w-full"
             severity="danger"
             :label="recruitment.enabled ? $t('recruitment.dashboard.finish-recruitment') : $t('recruitment.dashboard.reopen')"
-            @click="openFinishRecruitmentDialog"
+            @click="this.deleteRecruitmentDialog = true"
         />
       </div>
       <div class="grid gap-2">
@@ -29,7 +35,6 @@
             <div class="flex flex-col gap-4">
               <pv-button
                   class="w-full"
-                  severity="info"
                   :label="$t('view-applicants')"
                   @click="this.selectedPhase=null"
               />
@@ -43,6 +48,7 @@
               />
               <recruitment-phase-card
                   v-for="(phase, index) in phases.slice(1)"
+                  :applications="getApplicationsByPhaseId()"
                   :key="phase.id"
                   :recruitmentProcess="this.recruitment"
                   :phase="phase"
@@ -55,10 +61,11 @@
             </div>
           </div>
           <div class="w-full lg:w-2/3 overflow-x-auto h-full">
-            <p class="text-neutral-500 py-1">{{ $t('showing') + " " + (getCurrentPhaseTitle()==='' ? $t('all'):getCurrentPhaseTitle()) + " " + $t('applications')}}</p>
+            <p class="text-neutral-500 py-1">{{ $t('showing') + " " + (getCurrentPhaseTitle()==='' ? $t('all'):getCurrentPhaseTitle()) + " " + $t('applications-lbl')}}</p>
             <all-applicants-dialog
                 class="overflow-x-auto h-full"
                 :applications="getApplicationsByPhaseId()"
+                @edit-application-phase="updateRecruitment"
             />
           </div>
         </div>
@@ -72,14 +79,12 @@
       <create-recruitment-phase-form :recruitment-process-id="recruitment.id"
                                      @createdPhase="updateRecruitment" />
     </pv-dialog>
-    <!--Delete Recruitment Dialog-->
-    <pv-dialog v-model:visible="deleteRecruitmentDialog"
-               :header="recruitment.enabled ? $t('recruitment.dashboard.finish-recruitment'):$t('recruitment.dashboard.reopen')"
+    <!--New Phase Dialog-->
+    <pv-dialog v-model:visible="automationDialog"
+               :header="$t('automation')"
                modal :dismissableMask="true"
                class="w-full md:w-1/3">
-      <finish-reopen-recruitment-dialog
-          :recruitment="recruitment"
-          @updatedRecruitment="updateRecruitment" />
+      Building...
     </pv-dialog>
     <!--Edit Job Post Dialog-->
     <pv-dialog v-model:visible="editJobPostDialog"
@@ -89,6 +94,15 @@
       <edit-jobPost-form
           :jobPost="recruitment.jobPost"
           @updatedJobPost="updateRecruitment" />
+    </pv-dialog>
+    <!--Delete Recruitment Dialog-->
+    <pv-dialog v-model:visible="deleteRecruitmentDialog"
+               :header="recruitment.enabled ? $t('recruitment.dashboard.finish-recruitment'):$t('recruitment.dashboard.reopen')"
+               modal :dismissableMask="true"
+               class="w-full md:w-1/3">
+      <finish-reopen-recruitment-dialog
+          :recruitment="recruitment"
+          @updatedRecruitment="updateRecruitment" />
     </pv-dialog>
   </div>
   <div v-else>
@@ -119,6 +133,11 @@ export default {
     RecruitmentPhaseCard,
     RecruitmentCard
   },
+  computed: {
+    automationLabel() {
+      return this.$t('automation') + ' 🆕';
+    }
+  },
   data() {
     return {
       recruitmentApi: new RecruitmentApiService(),
@@ -131,7 +150,7 @@ export default {
       deleteRecruitmentDialog: false,
       editJobPostDialog: false,
       newPhaseDialog: false,
-      allApplicantsDialog: false,
+      automationDialog: false,
       selectedPhase: null,
       bgColors: [
         'bg-lime-100',
@@ -139,7 +158,7 @@ export default {
       ],
       bgColorsDark:[
         'dark:bg-cyan-900',
-        'dark:bg-gray-900'
+        'dark:bg-gray-700'
       ]
     }
   },
@@ -147,15 +166,6 @@ export default {
     this.updateRecruitment();
   },
   methods: {
-    openFinishRecruitmentDialog() {
-      this.deleteRecruitmentDialog = true;
-    },
-    openEditJobPostDialog() {
-      this.editJobPostDialog = true;
-    },
-    openNewPhaseDialog() {
-      this.newPhaseDialog = true;
-    },
     updateRecruitment() {
       this.recruitment = null;
 

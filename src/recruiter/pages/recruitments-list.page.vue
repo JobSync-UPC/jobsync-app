@@ -3,13 +3,12 @@
     <h1 class="text-2xl text-primary font-bold py-2">{{$t('recruitment.title')}}</h1>
     <div class="flex justify-between items-center">
       <pv-button @click="openCreateRecruitmentProcess"
-                 severity="success"
                  icon="pi pi-plus"
                  :label = "$t('organization-profile.new-recruitment-btn-label')"
       />
       <div class="flex items-center">
-        <input type="text" v-model="searchTerm" @keyup.enter="confirmSearch" placeholder="Search..." class="border p-2 rounded"/>
-        <pv-button icon="pi pi-search" aria-label="Search" outlined @click="confirmSearch" />
+        <input type="text" v-model="searchTerm" @keyup.enter="confirmSearch" :placeholder="$t('search')" class="border p-2 rounded"/>
+        <pv-button icon="pi pi-search" :aria-label="$t('search')" @click="confirmSearch" />
       </div>
     </div>
     <div class="grid md:grid-cols-2 gap-4 py-4">

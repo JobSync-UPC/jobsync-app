@@ -19,7 +19,7 @@
         <h1 class="font-semibold text-lg">{{ phase.title }}</h1>
         <pv-button
             @click="phaseDialog = true"
-            icon="pi pi-ellipsis-h" text rounded size="large" severity="secondary" outlined
+            icon="pi pi-ellipsis-h" text rounded size="large" severity="secondary"
             aria-label="Phase dialog expander" />
         <pv-dialog v-model:visible="phaseDialog" modal :header=phase.title class="w-1/2">
           <div class="grid gap-2">
@@ -45,8 +45,8 @@
                       type="text"
                   />
                 </div>
-                <pv-button outlined type="submit"
-                           :enabled="!this.loading"
+                <pv-button type="submit"
+                           :disabled="this.loading"
                            :label="this.loading ? $t('loading') : $t('accept')"
                 />
               </div>
@@ -54,7 +54,7 @@
             <div class="grid w-full" v-if="isFirstPhase===false">
               <pv-button type="submit"
                          severity="danger"
-                         :enabled="!this.loading"
+                         :disabled="this.loading"
                          :label="this.loading ? $t('loading') : $t('delete')"
                          @click="deletePhase(phase)"
               />
@@ -120,6 +120,10 @@ export default {
       type: Boolean,
       default: false
     },
+    applications : {
+      type: Array,
+      default: []
+    },
   },
   data() {
     return {
@@ -165,7 +169,7 @@ export default {
             this.$toast.add({
               severity: "success",
               summary: "JobSync",
-              detail: "Edited",
+              detail: this.$t('edited'),
               life: 2000
             });
             this.phase.title = this.title;
@@ -190,6 +194,18 @@ export default {
       if (this.isFirstPhase === true) {
         return;
       }
+
+      if (this.applications.length > 0) {
+        this.loading = false;
+        this.$toast.add({
+          severity: "error",
+          summary: "JobSync",
+          detail: this.$t('delete-phase-warn'),
+          life: 2000
+        });
+        return;
+      }
+
 
       this.phaseService.deletePhase(this.phase.id)
           .then(() => {

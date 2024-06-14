@@ -60,7 +60,7 @@
       <pv-input class="w-full" placeholder="jobsync.com" required v-model="website" />
     </div>
     <pv-message severity="info" :closable="false">{{ $t('create-org.add-members-msg') }}</pv-message>
-    <pv-button type="submit" outlined :label="$t('create-org.create-organization')"/>
+    <pv-button type="submit" :label="$t('create-org.create-organization')"/>
   </form>
 </template>
 

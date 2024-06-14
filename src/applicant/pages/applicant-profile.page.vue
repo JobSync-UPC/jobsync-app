@@ -49,7 +49,7 @@
                 type="text"
             />
           </div>
-          <pv-button type="submit" @click="saveChanges" outlined :label="$t('auth.save-changes')" />
+          <pv-button type="submit" @click="saveChanges" :label="$t('auth.save-changes')" />
           <pv-button @click="cancelChanges" severity="danger" :label="$t('profile-settings.discard-changes')" />
         </form>
       </div>

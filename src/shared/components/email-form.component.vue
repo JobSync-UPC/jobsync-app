@@ -1,6 +1,6 @@
 <template>
   <div class="grid gap-4 p-4">
-    <div class="flex items-center gap-2 mb-2">
+    <div class="flex flex-wrap items-center gap-2 mb-2">
       <p>{{ $t('to') }}:</p>
       <div v-for="(email, index) in emailTo" :key="index">
         <pv-button
@@ -9,11 +9,20 @@
             severity="secondary"
             size="small"
             rounded
-            @click="removeCCEmail(index)"
+            @click="removeToEmail(index)"
         />
       </div>
+      <pv-input
+          :invalid="isInvalidTo === true"
+          v-model="this.toInput"
+          type="email"
+          :placeholder="$t('to')"
+          @input="handleToInput"
+          @keydown="handleToKeydown"
+      />
+      <p class="text-red-700 text-xs">{{ this.infoToMessage }}</p>
     </div>
-    <div class="flex items-center gap-2 mb-2">
+    <div class="flex flex-wrap items-center gap-2 mb-2">
       <p>{{ $t('cc') }}:</p>
       <div v-for="(email, index) in emailCC" :key="index">
         <pv-button
@@ -25,38 +34,44 @@
             @click="removeCCEmail(index)"
         />
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2">
       <pv-input
-          v-model="ccInput"
-          type="text"
-          :placeholder="$t('to')"
-          @input=""
-          @keydown=""
-      />
-      <pv-input
-          v-model="ccInput"
+          :invalid="isInvalidCC === true"
+          v-model="this.ccInput"
           type="text"
           :placeholder="$t('cc')"
           @input="handleCCInput"
           @keydown="handleCCKeydown"
       />
+      <p class="text-red-700 text-xs">{{ this.infoCCMessage }}</p>
     </div>
 
-    <pv-input
-        v-model="this.emailSubject"
-        type="text"
-        placeholder="Subject"
-    />
-    <pv-textarea
-        v-model="this.emailContent"
-        type="text"
-        placeholder="Content"
-        rows="5" cols="30"
-    />
+    <div class="w-full">
+      <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
+        {{ $t('subject') }}
+      </label>
+      <pv-input
+          class="w-full"
+          v-model="this.newEmailSubject"
+          type="text"
+      />
+    </div>
+    <div class="w-full">
+      <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
+        {{ $t('content') }}
+      </label>
+      <pv-textarea
+          class="w-full"
+          v-model="this.newEmailContent"
+          type="text"
+          rows="5"
+          cols="30"
+      />
+    </div>
 
-    <div>
-      <p>{{ $t('attachments') }}:</p>
+    <div class="w-full">
+      <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
+        {{ $t('attachments') }}
+      </label>
       <pv-file-upload
           :auto="true"
           multiple
@@ -70,7 +85,6 @@
         iconPos="right"
         :label="$t('send')"
         icon="pi pi-envelope"
-        severity="help"
         @click="sendEmail"
     />
   </div>
@@ -78,7 +92,7 @@
 
 <script>
 export default {
-  name: "email-form",
+  name: "EmailForm",
   props: {
     emailTo: {
       type: Array,
@@ -97,33 +111,103 @@ export default {
   },
   data() {
     return {
+      infoCCMessage: '',
+      infoToMessage: '',
       ccInput: '',
-      selectedFiles: []
+      toInput: '',
+      isInvalidTo: false,
+      isInvalidCC: false,
+      selectedFiles: [],
+      newEmailSubject: '',
+      newEmailContent: '',
     }
   },
+  created() {
+    this.newEmailSubject = this.emailSubject;
+    this.newEmailContent = this.emailContent;
+  },
   methods: {
+    isValidEmail(email, type) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const isValid = emailRegex.test(email);
+
+      if (type === 'to') {
+        this.isInvalidTo = !isValid;
+        this.infoToMessage = isValid ? '' : 'Invalid email address';
+      } else {
+        this.isInvalidCC = !isValid;
+        this.infoCCMessage = isValid ? '' : 'Invalid CC address';
+      }
+
+      return isValid;
+    },
     handleCCInput(event) {
+      this.infoToMessage = '';
+      this.infoCCMessage = '';
       const input = event.target.value;
+      this.isInvalidCC = !this.isValidEmail(input.trim(), 'cc');
       if (input.includes(' ')) {
         const email = input.trim();
-        if (email) {
+        if (email && this.isValidEmail(email, 'cc')) {
           this.emailCC.push(email);
+          this.isInvalidCC = false;
         }
         this.ccInput = '';
       }
     },
     handleCCKeydown(event) {
+      this.infoToMessage = '';
+      this.infoCCMessage = '';
       if (event.key === 'Enter') {
         const input = this.ccInput.trim();
-        if (input) {
+        if (input && this.isValidEmail(input, 'cc')) {
           this.emailCC.push(input);
+          this.isInvalidCC = false;
           this.ccInput = '';
+        } else {
+          this.isInvalidCC = true;
         }
-        event.preventDefault(); // Prevent form submission on Enter key
+        event.preventDefault();
       }
     },
     removeCCEmail(index) {
+      this.infoMessage = '';
       this.emailCC.splice(index, 1);
+    },
+    handleToInput(event) {
+      this.infoToMessage = '';
+      this.infoCCMessage = '';
+      const input = event.target.value;
+      this.isInvalidTo = !this.isValidEmail(input.trim(), 'to');
+      if (input.includes(' ')) {
+        const email = input.trim();
+        if (email && this.isValidEmail(email,'to')) {
+          this.emailTo.push(email);
+          this.isInvalidTo = false;
+        }
+        this.toInput = '';
+      }
+    },
+    handleToKeydown(event) {
+      this.infoToMessage = '';
+      this.infoCCMessage = '';
+      if (event.key === 'Enter') {
+        const input = this.toInput.trim();
+        if (input && this.isValidEmail(input, 'to')) {
+          this.emailTo.push(input);
+          this.isInvalidTo = false;
+          this.toInput = '';
+        } else {
+          this.isInvalidTo = true;
+        }
+        event.preventDefault();
+      }
+    },
+    removeToEmail(index) {
+      this.infoToMessage = '';
+      this.infoCCMessage = '';
+      this.emailTo.splice(index, 1);
     },
     onFileSelect(event) {
       this.selectedFiles = [...this.selectedFiles, ...event.files];
@@ -131,8 +215,9 @@ export default {
     sendEmail() {
       console.log('Email to:', this.emailTo);
       console.log('CC:', this.emailCC);
-      console.log('Subject:', this.emailSubject);
-      console.log('Content:', this.emailContent);
+      console.log('Subject:', this.newEmailSubject);
+      console.log('Content:', this.newEmailContent);
+      console.log('Attachments:', this.selectedFiles);
     }
   }
 }

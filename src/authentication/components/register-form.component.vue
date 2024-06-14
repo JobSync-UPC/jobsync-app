@@ -112,7 +112,7 @@
               />
             </div>
           </div>
-          <pv-button type="submit" :label="$t('auth.sign-up')" outlined/>
+          <pv-button type="submit" :label="$t('auth.sign-up')"/>
           <p class="text-center my-4">{{ $t('auth.have-account-question') }}<router-link class="hover:font-medium text-primary" to="/login">{{ $t('auth.sign-title') }}</router-link></p>
         </form>
       </div>

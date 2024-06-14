@@ -10,8 +10,7 @@
       <pv-button
           :label="$t('email-all')"
           icon="pi pi-envelope"
-          severity="help"
-          rounded
+          severity="contrast"
           @click="openEmailDialog(applications)"
       />
     </div>
@@ -91,13 +90,13 @@
             <div class="flex gap-2">
               <pv-button
                   icon="pi pi-envelope"
-                  severity="help"
+                  severity="contrast"
                   rounded
                   @click="openEmailDialog(slotProps.data)"
               />
               <pv-button
                   icon="pi pi-pencil"
-                  severity="warning"
+                  severity="warn"
                   rounded
                   @click="openEditDialog(slotProps.data)"
               />
@@ -128,19 +127,22 @@
   <pv-dialog v-model:visible="editDialog"
              :header="$t('edit')"
              modal :dismissableMask="true"
+             position="top"
              class="w-1/2">
-    <div>
-      A
-    </div>
+    <edit-application-dialog
+        :application="applications[0]"
+        @edit-application-phase="editApplicationPhase"
+    />
   </pv-dialog>
 </template>
 
 <script>
 import EmailForm from "../../shared/components/email-form.component.vue";
+import EditApplicationDialog from "./edit-application-dialog.component.vue";
 
 export default {
   name: "all-applicants-dialog",
-  components: {EmailForm},
+  components: {EditApplicationDialog, EmailForm},
   props: {
     applications: {
       type: Array,
@@ -172,28 +174,35 @@ export default {
     }
   },
   methods: {
-    formatUrl(url) {
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        return 'https://' + url;
-      }
-      return url;
-    },
     formatDate(date) {
       if (!date) return "";
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return new Date(date).toLocaleDateString('en-US', options);
     },
+    setUpApplications(applications) {
+      this.selectedEmails = [];
+
+      if (!Array.isArray(applications)) {
+        this.selectedEmails.push(applications.applicant.username);
+        return;
+      }
+
+      applications.forEach(application => {
+        this.selectedEmails.push(application.applicant.username);
+      });
+      this.emailDialog = true;
+    },
     openEmailDialog(applications) {
-      this.selectedApplications = applications;
-      this.selectedEmails = applications.map(application => application.applicant.username);
+      this.setUpApplications(applications);
       this.emailDialog = true;
     },
     openEditDialog(applications) {
-      this.selectedApplications = applications;
+      this.setUpApplications(applications);
       this.editDialog = true;
     },
-    sendEmail(){
-
+    editApplicationPhase(application) {
+      this.$emit('edit-application-phase');
+      this.editDialog = false;
     }
   }
 }

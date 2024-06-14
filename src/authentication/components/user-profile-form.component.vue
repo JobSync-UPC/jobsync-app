@@ -67,7 +67,7 @@
               />
             </div>
           </div>
-          <pv-button type="submit" :label="$t('auth.save-changes')" outlined />
+          <pv-button type="submit" :label="$t('auth.save-changes')" />
         </form>
       </div>
     </div>

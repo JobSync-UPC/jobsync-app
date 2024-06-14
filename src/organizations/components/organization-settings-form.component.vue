@@ -27,7 +27,6 @@
         <div class="grid items-center">
           <div class="card grid justify-content-center ">
             <pv-button
-                outlined
                 aria-label="Change Plan button"
                 :label="$t('organization-settings.current-plan') + ': ' + $t('plans.free')"
                 class="w-full"
@@ -85,7 +84,7 @@
           </div>
         </div>
       </div>
-      <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')" outlined/>
+      <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')"/>
     </form>
   </div>
 
@@ -143,7 +142,6 @@
           :label="$t('organization-settings.accept')"
           icon="pi pi-check"
           @click="planVisible = false"
-          outlined
       />
     </template>
   </pv-dialog>

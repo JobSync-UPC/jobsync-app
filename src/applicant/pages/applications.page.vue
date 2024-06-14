@@ -63,7 +63,6 @@
         <template #body="slotProps">
           <pv-button
               rounded
-              outlined
               severity="secondary"
               :disabled="slotProps.data.recruitmentProcess.enabled === false"
               icon="pi pi-ellipsis-h"

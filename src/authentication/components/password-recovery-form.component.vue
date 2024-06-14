@@ -19,7 +19,7 @@
         </label>
         <pv-input id="password" class="w-full" type="password" placeholder="••••••••••••" />
       </div>
-      <pv-button type="submit" label="Change Password" outlined />
+      <pv-button type="submit" label="Change Password" />
       <div class="grid place-items-center">
           <p>{{ $t('auth.password-recovery.go-back') }} 
             <router-link to="/login">

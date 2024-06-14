@@ -14,13 +14,16 @@ export const useThemeStore = defineStore({
     setTheme(theme) {
       // Tailwind
       const root = window.document.documentElement;
-      root.classList.remove(this.colorTheme);
-      root.classList.add(theme);
+      root.classList.remove(this.theme);
       this.theme = theme;
 
       // Primevue theme
-      const themeLink = document.getElementById('theme-link');
-      themeLink.href = `/themes/viva-${theme}/theme.css`;
+      // const themeLink = document.getElementById('theme-link');
+      // themeLink.href = `/themes/viva-${theme}/theme.css`;
+
+      // Primevue 4.0
+      this.theme === 'dark' ? root.classList.add('dark') : root.classList.add('light');
+
       localStorage.setItem('theme', theme);
 
       // Update the theme in the store's state

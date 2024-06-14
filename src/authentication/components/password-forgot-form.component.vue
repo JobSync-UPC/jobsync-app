@@ -17,7 +17,7 @@
         </label>
         <pv-input id="password" class="w-full" placeholder="example@mail.com" type="email" />
       </div>
-      <pv-button type="submit" label="Send me the link" outlined/>
+      <pv-button type="submit" label="Send me the link"/>
       <div class="grid place-items-center">
         <p>   {{ $t('auth.password-forgot.go-back') }}
           <router-link to="/login">

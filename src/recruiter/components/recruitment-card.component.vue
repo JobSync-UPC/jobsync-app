@@ -13,7 +13,7 @@
             <span class="font-semibold">{{ $t('recruitment-card.start-date-label') }}: </span>
             {{ formatDate(recruitment.created_date) }}
             <span class="font-medium">
-            ({{ getPassedDays(recruitment.created_date) }} ago)
+            ({{ getPassedDays(recruitment.created_date) }})
           </span>
           </li>
           <li class="font-medium">
@@ -66,10 +66,10 @@ export default {
 
       if (diffDays === 0) {
         const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-        return diffHours + (diffHours === 1 ? " hour" : " hours");
+        return this.$t('ago-es') + " " + diffHours + (diffHours === 1 ? this.$t('hour') : this.$t('hours')) + this.$t('ago-en');
       }
 
-      return diffDays + (diffDays === 1 ? " day" : " days");
+      return this.$t('ago-es') + " " + diffDays + " " + (diffDays === 1 ? this.$t('day') : this.$t('days')) + this.$t('ago-en');
     },
     formatUrl(url) {
       if (!url.startsWith('http://') && !url.startsWith('https://')) {

@@ -33,7 +33,6 @@
         </ul>
       </div>
       <pv-button
-          outlined
           :label="this.alreadyApplied ? $t('applied'):$t('apply-to-job')"
           :disabled="this.alreadyApplied"
           @click="openConfirmationDialog"
@@ -60,7 +59,7 @@
       <div class="flex justify-end gap-4 mt-4">
         <pv-button :enabled="!this.isLoading"
                    :label="this.isLoading ? $t('loading') : $t('accept')"
-                   @click="applyToJob" outlined />
+                   @click="applyToJob" />
         <pv-button :label="$t('cancel')" @click="this.isDialogVisible = false" severity="danger" />
       </div>
     </div>

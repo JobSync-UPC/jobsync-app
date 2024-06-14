@@ -69,10 +69,6 @@ function handleRecruiter(userStore, to, next) {
     if (to.meta.requiresApplicant) {
         next('/');
     }
-    // If the route does not require a company and the user has a company, redirect to recruitments
-    else if (!to.meta.requiresCompany && userStore.hasCompany) {
-        next('/recruitments');
-    }
     // If the route requires a company and the user does not have a company, redirect to init
     else if (to.meta.requiresCompany && !userStore.hasCompany) {
         next('/init');

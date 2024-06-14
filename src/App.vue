@@ -52,6 +52,10 @@ export default {
     if (userData) {
       userStore.login(JSON.parse(userData));
     }
+
+    const themeStore = useThemeStore();
+    const theme = localStorage.getItem('theme');
+    themeStore.setTheme(theme);
   },
 }
 </script>
