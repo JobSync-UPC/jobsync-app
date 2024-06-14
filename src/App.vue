@@ -7,12 +7,17 @@
 </template>
 
 <script>
-import {useThemeStore} from "./settings/stores/app-theme.store.js";
-import {useUserStore} from "./shared/store/user-store.store.js";
+import { useThemeStore } from "./settings/stores/app-theme.store.js";
+import { useUserStore } from "./shared/store/user-store.store.js";
 import Navbar from "./shared/components/navbar.component.vue";
 
 export default {
-  components: {Navbar},
+  components: { Navbar },
+  data() {
+    return {
+      user: {}, // Initialize user as an empty object
+    };
+  },
   created() {
     this.$i18n.locale = localStorage.getItem("preferred-language") ?? "en";
     const user = localStorage.getItem("auth");
@@ -25,7 +30,7 @@ export default {
     theme() {
       return useThemeStore().theme;
     },
-    user() {
+    storedUser() {
       return useUserStore().user;
     }
   },
@@ -34,6 +39,11 @@ export default {
       const store = useThemeStore();
       store.setTheme(newTheme);
     },
+    storedUser(newUser) {
+      if (newUser) {
+        this.user = newUser;
+      }
+    }
   },
   mounted() {
     const userStore = useUserStore();
@@ -42,6 +52,10 @@ export default {
     if (userData) {
       userStore.login(JSON.parse(userData));
     }
+
+    const themeStore = useThemeStore();
+    const theme = localStorage.getItem('theme');
+    themeStore.setTheme(theme);
   },
 }
 </script>

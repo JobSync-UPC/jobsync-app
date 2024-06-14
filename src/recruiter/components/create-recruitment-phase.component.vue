@@ -21,7 +21,7 @@
             type="text"
         />
       </div>
-      <pv-button outlined type="submit"
+      <pv-button type="submit"
                  :enabled="!this.loading"
                  :label="this.loading ? $t('loading') : $t('accept')"
       />

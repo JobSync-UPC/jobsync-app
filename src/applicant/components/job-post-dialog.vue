@@ -33,7 +33,6 @@
         </ul>
       </div>
       <pv-button
-          outlined
           :label="this.alreadyApplied ? $t('applied'):$t('apply-to-job')"
           :disabled="this.alreadyApplied"
           @click="openConfirmationDialog"
@@ -49,7 +48,9 @@
     </div>
   </div>
   <div v-else>
-    <pv-spinner />
+    <div class="flex items-center justify-center">
+      <pv-spinner />
+    </div>
   </div>
 
   <pv-dialog v-model:visible="isDialogVisible" header="" modal>
@@ -58,7 +59,7 @@
       <div class="flex justify-end gap-4 mt-4">
         <pv-button :enabled="!this.isLoading"
                    :label="this.isLoading ? $t('loading') : $t('accept')"
-                   @click="applyToJob" outlined />
+                   @click="applyToJob" />
         <pv-button :label="$t('cancel')" @click="this.isDialogVisible = false" severity="danger" />
       </div>
     </div>
@@ -99,7 +100,7 @@ export default {
       this.applicationService.getApplicationsByApplicantId(applicantId).then(
           response => {
             const applications = response.data;
-            const hasApplied = applications.some(application => application.recruitmentProcessId === this.recruitmentProcess.id);
+            const hasApplied = applications.some(application => application.recruitmentProcess.id === this.recruitmentProcess.id);
 
             this.alreadyApplied = !!hasApplied;
           }
@@ -130,7 +131,7 @@ export default {
           }
       ).catch(e => {
         console.log(e)
-        this.$toast.add({severity: 'error', summary: "Error", detail: "There was an error. Try again later", life:2000});
+        this.$toast.add({severity: 'error', summary: "Error", detail: "There was an error. Try again later " + e.response, life:2000});
       })
           .finally(
               () => {

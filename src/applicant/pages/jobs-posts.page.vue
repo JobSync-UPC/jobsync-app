@@ -4,7 +4,7 @@
       <h1 class="text-2xl text-primary font-bold py-2">{{$t('navbar.jobs')}}</h1>
       <div class="flex items-center">
         <input type="text" v-model="searchTerm" @keyup.enter="confirmSearch" placeholder="Search..." class="border p-2 rounded"/>
-        <pv-button icon="pi pi-search" aria-label="Search" outlined @click="confirmSearch" />
+        <pv-button icon="pi pi-search" aria-label="Search" @click="confirmSearch" />
       </div>
     </div>
     <p>{{ $t('showing') }} {{recruitmentProcesses.length}} {{$t('navbar.jobs')}}</p>
@@ -27,7 +27,9 @@
     />
   </div>
   <div v-else>
-    <pv-spinner />
+    <div class="flex items-center justify-center">
+      <pv-spinner />
+    </div>
   </div>
 </template>
 

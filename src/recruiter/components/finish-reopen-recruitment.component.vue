@@ -14,7 +14,8 @@
                 :placeholder="recruitment.jobPost.title"
                 type="text"
       />
-      <pv-button outlined type="submit"
+      <pv-button type="submit"
+                 severity="danger"
                  :label="this.loadingFinishingRecruitment ? $t('loading') : $t('accept')"
       />
     </div>

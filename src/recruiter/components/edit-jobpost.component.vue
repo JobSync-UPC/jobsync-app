@@ -22,7 +22,7 @@
               type="text"
           />
         </div>
-        <pv-button outlined type="submit"
+        <pv-button type="submit"
                    :enabled="!this.loading"
                    :label="this.loading ? $t('loading') : $t('accept')"
         />
@@ -30,7 +30,7 @@
     </form>
     <pv-button type="submit"
                :enabled="!this.loading"
-               severity="warning"
+               severity="danger"
                :label="jobPost.enabled ? $t('disable-jobpost'):$t('enable-jobpost')"
                @click="updateJobPostStatus(jobPost)"
     />

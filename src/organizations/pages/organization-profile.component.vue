@@ -2,7 +2,9 @@
   <div class="space-y-4">
     <div class="justify-center items-center">
       <div v-if="!this.company" class="flex items-center">
-        <pv-spinner/>
+        <div class="flex items-center justify-center">
+          <pv-spinner />
+        </div>
       </div>
       <div v-else>
         <organization-settings-form

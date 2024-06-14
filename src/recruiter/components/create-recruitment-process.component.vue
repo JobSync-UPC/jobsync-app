@@ -12,7 +12,7 @@
           :placeholder="$t('recruitment.create-recruitment.description-placeholder')"
           type="text"
       />
-      <pv-button outlined type="submit"
+      <pv-button type="submit"
                  :label="this.isCreating ? $t('recruitment.create-recruitment.creating-lbl') : $t('recruitment.create-recruitment.create-submit-lbl')"
       />
     </div>

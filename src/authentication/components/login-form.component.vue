@@ -20,7 +20,6 @@
         <pv-input id="password" class="w-full" v-model="password" type="password" placeholder="••••••••••••" required />
       </div>
       <pv-button type="submit"
-                 outlined
                  :label="isLoggingIn ? $t('auth.logging-in') : $t('auth.login')"
                  :disabled="isLoggingIn"
       />

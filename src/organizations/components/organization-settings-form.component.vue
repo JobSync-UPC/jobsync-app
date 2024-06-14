@@ -27,7 +27,6 @@
         <div class="grid items-center">
           <div class="card grid justify-content-center ">
             <pv-button
-                outlined
                 aria-label="Change Plan button"
                 :label="$t('organization-settings.current-plan') + ': ' + $t('plans.free')"
                 class="w-full"
@@ -85,7 +84,7 @@
           </div>
         </div>
       </div>
-      <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')" outlined/>
+      <pv-button type="submit" class="w-full" :label="$t('organization-settings.save-changes')"/>
     </form>
   </div>
 
@@ -143,7 +142,6 @@
           :label="$t('organization-settings.accept')"
           icon="pi pi-check"
           @click="planVisible = false"
-          outlined
       />
     </template>
   </pv-dialog>
@@ -152,6 +150,7 @@
 <script>
 import {CountriesApiService} from "../../shared/services/countries.service.js";
 import {CompaniesService} from "../service/companies.service.js";
+import {CloudinaryService} from "../../shared/services/cloudinary.service.js";
 
 export default {
   name: "organization-settings-form",
@@ -169,6 +168,9 @@ export default {
       planVisible: false,
       selectedPlan: null,
       companyService: new CompaniesService(),
+      cloudinaryService: new CloudinaryService(),
+
+      file: null,
 
       logoUrl: '',
       name: '',
@@ -206,8 +208,22 @@ export default {
     handleRadioButtonClick(plan, event) {
       event.stopPropagation();
     },
-    updateCompany(event) {
-      event.preventDefault();
+    uploadPhoto(){
+      this.cloudinaryService.uploadPicture(this.file)
+          .then(response => {
+            this.logoUrl = response.data;
+            this.updateAll();
+          })
+          .catch(error => {
+            this.$toast.add({
+              severity: "warn",
+              detail: "Error uploading profile picture",
+              summary: error.response.data.message,
+              life: 2000
+            });
+          });
+    },
+    updateAll(){
       this.companyService
           .updateCompanyById(
               this.currentOrganization.id,
@@ -238,7 +254,41 @@ export default {
               life: 2000
             });
           });
-    }
+    },
+    updateCompany(event) {
+      event.preventDefault();
+
+      if (this.file !== null) {
+        this.uploadPhoto();
+      }
+      else {
+        this.updateAll();
+      }
+    },
+    selectedFile(event) {
+      const file = event.files[0];
+      this.file = file;
+
+      if (file) {
+        try {
+          this.logoUrl = URL.createObjectURL(file);
+        } catch (error) {
+          this.$toast.add({
+            severity: "warn",
+            detail: "Error uploading file",
+            summary: error,
+            life: 2000
+          });
+        }
+      } else {
+        this.$toast.add({
+          severity: "warn",
+          detail: "Invalid file type",
+          summary: error.response.data.message,
+          life: 2000
+        });
+      }
+    },
   }
 
 }
