@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <div class="justify-center items-center">
       <div v-if="!this.company" class="flex items-center">
-        <div class="flex items-center justify-center">
+        <div class="flex items-center justify-center w-full">
           <pv-spinner />
         </div>
       </div>

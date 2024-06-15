@@ -3,6 +3,8 @@
     "go-back-btn-label": "Go back",
     "hello": "Hello"
   },
+  "email-history": "Email history",
+  "application-for": "Application for",
   "edited": "Edited",
   "delete-phase-warn": "There are applications in this phase. Please move them to another phase before deleting.",
   "edit-phase-title": "Edit phase",

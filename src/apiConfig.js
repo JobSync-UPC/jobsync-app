@@ -11,3 +11,4 @@ export const recruitmentProcessesBaseUrl = `${baseUrl}api/v1/recruitment-process
 export const applicationsUrl = `${baseUrl}api/v1/applications`;
 export const phasesBasUrl = `${baseUrl}api/v1/recruitment-phases`;
 export const cloudinaryUrl = `${baseUrl}cloudinary/api/images/upload`;
+export const emailUrl = `${baseUrl}/email/`;

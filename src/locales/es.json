@@ -3,6 +3,8 @@
     "go-back-btn-label": "Volver atrás",
     "hello": "Hola"
   },
+  "email-history": "Historial de email",
+  "application-for": "Postulación para",
   "edited": "Editado",
   "delete-phase-warn": "Hay postulantes en esta fase. Por favor moverlos a otra fase antes de eliminar la fase de reclutamiento.",
   "edit-phase-title": "Editar fase",
