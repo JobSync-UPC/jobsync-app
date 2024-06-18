@@ -11,12 +11,8 @@
       <pv-column :header="$t('company')">
         <template #body="slotProps">
           <div class="flex gap-2 items-center">
-            <div class="flex justify-center items-center shadow w-24 h-24 p-4">
-              <img
-                  :src="slotProps.data.recruitmentProcess.company.logoUrl"
-                  alt="Company logo"
-                  class="object-cover"
-              />
+            <div class="w-24 h-24 shadow p-4 overflow-hidden">
+              <img class="object-cover w-full h-full" :src="slotProps.data.recruitmentProcess.company.logoUrl" alt="company logo" />
             </div>
             <div>
               <a :href="formatUrl(slotProps.data.recruitmentProcess.company.website)" target="_blank" class="font-bold text-primary underline">
@@ -63,9 +59,10 @@
         <template #body="slotProps">
           <pv-button
               rounded
-              severity="secondary"
+              severity="contrast"
               :disabled="slotProps.data.recruitmentProcess.enabled === false"
-              icon="pi pi-ellipsis-h"
+              :icon="slotProps.data.isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-envelope'"
+              @click="showEmailDialog(slotProps.data)"
           />
         </template>
       </pv-column>
@@ -76,36 +73,61 @@
       <pv-spinner />
     </div>
   </div>
+
+  <pv-dialog
+      v-model:visible="emailDialog" modal
+      :header="$t('email')"
+      :style="{ width: '50vw' }"
+      :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+      :draggable="false"
+      position="top"
+  >
+    <email-form
+        :emailTo="selectedEmails"
+        :emailCC="selectedCC"
+        :emailSubject="emailSubject"
+        :emailContent="emailContent"
+    />
+  </pv-dialog>
 </template>
 
 <script>
-import {useUserStore} from "../../shared/store/user-store.store.js";
-import {ApplicationsService} from "../../shared/services/applications.service.js";
-import {RecruitmentApiService} from "../../shared/services/recruitment.service.js";
+import { useUserStore } from "../../shared/store/user-store.store.js";
+import { ApplicationsService } from "../../shared/services/applications.service.js";
+import { RecruitmentApiService } from "../../shared/services/recruitment.service.js";
+import EmailForm from "../../shared/components/email-form.component.vue";
 
 export default {
   name: "jobs-posts-page",
-  components: {  },
-  data(){
+  components: { EmailForm },
+  data() {
     return {
       applications: null,
       applicationService: new ApplicationsService(),
-      recruitmentProcessService: new RecruitmentApiService()
-    }
+      recruitmentProcessService: new RecruitmentApiService(),
+      selectedApplication: null,
+      emailDialog: false,
+      selectedEmails: [],
+      selectedCC: [],
+      emailSubject: "",
+      emailContent: "",
+    };
   },
-  created(){
+  created() {
     this.updateApplications();
-
   },
   methods: {
-    updateApplications(){
+    updateApplications() {
       this.applications = null;
       const userStore = useUserStore();
       const applicantId = userStore.user.id;
 
       this.applicationService.getApplicationsByApplicantId(applicantId).then(
           response => {
-            this.applications = response.data;
+            this.applications = response.data.map(application => ({
+              ...application,
+              isLoading: false, // Add isLoading property to each application
+            }));
           }
       ).catch(e => {
         console.log(e);
@@ -122,22 +144,22 @@ export default {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return new Date(date).toLocaleDateString('en-US', options);
     },
-    getPassedDays(date) {
-      if (!date) return "";
-      const today = new Date();
-      const createdDate = new Date(date);
-      const diffTime = today - createdDate;
+    showEmailDialog(application) {
+      application.isLoading = true; // Set loading state for the specific application
+      this.selectedApplication = application;
 
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      this.selectedEmails = [];
+      this.selectedCC = [];
+      this.emailSubject = `JobSync - ` + this.$t('application-for') + ` ${application.recruitmentProcess.jobPost.title}`;
 
-      if (diffDays === 0) {
-        const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-        return diffHours + (diffHours === 1 ? " hour" : " hours");
-      }
-
-      return diffDays + (diffDays === 1 ? " day" : " days");
-    }
-  }
-}
-
+      this.applicationService.getRecruitersEmails(application.id).then(response => {
+        this.selectedEmails = response.data;
+        application.isLoading = false; // Reset loading state after data is fetched
+        this.emailDialog = true;
+      }).catch(() => {
+        application.isLoading = false; // Reset loading state in case of error
+      });
+    },
+  },
+};
 </script>

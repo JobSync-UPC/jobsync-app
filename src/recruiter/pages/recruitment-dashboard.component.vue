@@ -1,7 +1,7 @@
 <template>
   <div v-if="recruitment && applications">
     <div class="grid gap-4">
-      <recruitment-card :recruitment="recruitment" />
+      <job-post-card :recruitment="recruitment" />
       <div class="grid md:flex gap-4">
         <pv-button
             class="w-full"
@@ -84,7 +84,20 @@
                :header="$t('automation')"
                modal :dismissableMask="true"
                class="w-full md:w-1/3">
-      Building...
+      <div class="grid gap-4">
+        <h1 class="font-medium">{{ $t('automation-description-main') }}</h1>
+        <div class="grid md:flex gap-8 items-center justify-center md:justify-between w-full">
+          <p>{{ $t('automation-description') }}</p>
+          <pv-button
+              class="w-full md:w-1/2"
+              :severity="isLoading? 'secondary' : recruitment.automaticEmails ? 'success' : 'danger'"
+              :label="this.recruitment.automaticEmails ? $t('active') : $t('inactive')"
+              :icon="this.recruitment.automaticEmails ? 'pi pi-check' : 'pi pi-times'"
+              :disabled="isLoading"
+              @click="toggleAutomaticEmails"
+          />
+        </div>
+      </div>
     </pv-dialog>
     <!--Edit Job Post Dialog-->
     <pv-dialog v-model:visible="editJobPostDialog"
@@ -113,7 +126,6 @@
 </template>
 
 <script>
-import RecruitmentCard from "../components/recruitment-card.component.vue";
 import {RecruitmentApiService} from "../../shared/services/recruitment.service.js";
 import RecruitmentPhaseCard from "../components/recruitment-phase-card.component.vue";
 import {useUserStore} from "../../shared/store/user-store.store.js";
@@ -122,16 +134,17 @@ import FinishReopenRecruitmentDialog from "../components/finish-reopen-recruitme
 import EditJobPostForm from "../components/edit-jobpost.component.vue";
 import CreateRecruitmentPhaseForm from "../components/create-recruitment-phase.component.vue";
 import AllApplicantsDialog from "../components/all-applicants-dialog.component.vue";
+import JobPostCard from "../../shared/components/job-post-card.component.vue";
 
 export default {
   name: "recruitment-dashboard",
   components: {
+    JobPostCard,
     AllApplicantsDialog,
     EditJobPostForm,
     CreateRecruitmentPhaseForm,
     FinishReopenRecruitmentDialog,
     RecruitmentPhaseCard,
-    RecruitmentCard
   },
   computed: {
     automationLabel() {
@@ -159,7 +172,8 @@ export default {
       bgColorsDark:[
         'dark:bg-cyan-900',
         'dark:bg-gray-700'
-      ]
+      ],
+      isLoading: false,
     }
   },
   created() {
@@ -192,6 +206,54 @@ export default {
       this.deleteRecruitmentDialog = false;
       this.editJobPostDialog = false;
       this.newPhaseDialog = false;
+    },
+    toggleAutomaticEmails(){
+      this.isLoading = true;
+
+      if (this.recruitment.automaticEmails !== true) {
+        this.recruitmentApi.activateAutomaticEmails(this.recruitment.id)
+            .then(() => {
+              this.$toast.add({
+                severity: 'success',
+                summary: this.$t('success'),
+                detail: this.$t('success-toggle-automatic-emails'),
+                life: 2000
+              });
+              this.recruitment.automaticEmails = true;
+              this.isLoading = false;
+            })
+            .catch(error => {
+              this.$toast.add({
+                severity: 'error',
+                summary: this.$t('error'),
+                detail: error.response.data.message || this.$t('error-toggle-automatic-emails'),
+                life: 2000
+              });
+              this.isLoading = false;
+            })
+      }
+      else {
+        this.recruitmentApi.deactivateAutomaticEmails(this.recruitment.id)
+            .then(() => {
+              this.$toast.add({
+                severity: 'success',
+                summary: this.$t('success'),
+                detail: this.$t('success-toggle-automatic-emails'),
+                life: 2000
+              });
+              this.recruitment.automaticEmails = false;
+              this.isLoading = false;
+            })
+            .catch(error => {
+              this.$toast.add({
+                severity: 'error',
+                summary: this.$t('error'),
+                detail: error.response.data.message || this.$t('error-toggle-automatic-emails'),
+                life: 2000
+              });
+              this.isLoading = false;
+            })
+      }
     },
     getApplicationsByPhaseId() {
       if (this.selectedPhase === null) {

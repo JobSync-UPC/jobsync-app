@@ -17,6 +17,7 @@ import OrganizationCreationForm from "../organizations/components/organization-c
 import OrganizationProfileComponent from "../organizations/pages/organization-profile.component.vue";
 import RecruitmentDashboardComponent from "../recruiter/pages/recruitment-dashboard.component.vue";
 import ApplicationsPage from "../applicant/pages/applications.page.vue";
+import EmailHistoryPage from "../shared/pages/email-history.page.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -29,6 +30,9 @@ const router = createRouter({
       // User profile edit and settings
       { path: '/manage-profile', name: 'User Profile', component: ProfileManagement, meta: { requiresAuth: true } },
       { path: '/settings', name: 'Settings', component: SettingsComponent, meta: { requiresAuth: true } },
+
+      // Email
+      { path: '/email', name: 'Email', component: EmailHistoryPage, meta: { requiresAuth: true } },
 
       // Applicants
       { path: '/jobs', name: 'Job posts', component: JobsPostsPage, meta: { requiresAuth: true, requiresCandidate: true, requiresApplicant: true } },

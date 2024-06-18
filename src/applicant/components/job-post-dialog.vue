@@ -2,8 +2,8 @@
   <div v-if="alreadyApplied !== null" class="grid gap-4">
     <div class="grid md:flex justify-center md:justify-between items-center">
       <div class="grid md:flex gap-8">
-        <div>
-          <img class="w-24 h-24 shadow p-4" :src="recruitmentProcess.company.logoUrl" alt="company logo" />
+        <div class="w-24 h-24 shadow p-4 overflow-hidden">
+          <img class="object-cover w-full h-full" :src="recruitmentProcess.company.logoUrl" alt="company logo" />
         </div>
         <ul>
           <li>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import JobPostCard from "./job-post-card.component.vue";
+import JobPostCard from "../../shared/components/job-post-card.component.vue";
 import {useUserStore} from "../../shared/store/user-store.store.js";
 import {ApplicationsService} from "../../shared/services/applications.service.js";
 

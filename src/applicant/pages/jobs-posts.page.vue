@@ -35,8 +35,9 @@
 
 <script>
 import {RecruitmentApiService} from "../../shared/services/recruitment.service.js";
-import JobPostCard from "../components/job-post-card.component.vue";
+import JobPostCard from "../../shared/components/job-post-card.component.vue";
 import JobPostDialog from "../components/job-post-dialog.vue";
+import {ApplicationsService} from "../../shared/services/applications.service.js";
 
 export default {
   name: "jobs-posts-page",
@@ -51,7 +52,8 @@ export default {
       filteredRecruitmentProcesses: [],
       jobPostDialog: false,
       selectedRecruitmentProcess: null,
-      alreadyApplied: null
+      alreadyApplied: null,
+      applicationsService: new ApplicationsService(),
     }
   },
   created() {
@@ -93,7 +95,7 @@ export default {
     showJobPostDialog(_recruitmentProcess){
       this.selectedRecruitmentProcess = _recruitmentProcess;
       this.jobPostDialog = true;
-    }
+    },
   }
 }
 </script>

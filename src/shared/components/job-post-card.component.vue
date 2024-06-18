@@ -9,6 +9,11 @@
           <li>
             <h1 class="font-semibold text-2xl">{{ recruitment.jobPost.title }}</h1>
           </li>
+          <li class="font-medium">
+            <a :href="formatUrl(recruitment.company.website)" target="_blank"><span class="font-bold text-primary underline">{{ recruitment.company.name }}</span></a>
+            •
+            {{ recruitment.company.country }}
+          </li>
           <li>
             <span class="font-semibold">{{ $t('recruitment-card.start-date-label') }}: </span>
             {{ formatDate(recruitment.created_date) }}
@@ -16,19 +21,8 @@
             ({{ getPassedDays(recruitment.created_date) }} ago)
           </span>
           </li>
-          <li class="font-medium">
-            <a :href="formatUrl(recruitment.company.website)" target="_blank"><span class="font-bold text-primary underline">{{ recruitment.company.name }}</span></a>
-            •
-            {{ recruitment.company.country }}
-          </li>
           <li>
-            <span class="font-semibold text-primary">{{ $t('recruitment-card.job-post-status-label') }}: </span>
-            <span v-if="recruitment.jobPost.enabled===true">
-              {{ $t('recruitment-card.open') }} 🟢
-            </span>
-            <span v-else>
-              {{ $t('recruitment-card.closed') }} 🔴
-            </span>
+            {{ applicationsCount }} {{ $t('applications') }}
           </li>
         </ul>
       </div>
@@ -42,6 +36,8 @@
 </template>
 
 <script>
+import { ApplicationsService } from "../services/applications.service.js";
+
 export default {
   name: "jobPost-card",
   props: {
@@ -50,7 +46,13 @@ export default {
       required: true
     }
   },
-  methods:{
+  data() {
+    return {
+      applicationsService: new ApplicationsService(),
+      applicationsCount: 0
+    };
+  },
+  methods: {
     formatDate(date) {
       if (!date) return "";
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -76,10 +78,19 @@ export default {
         return 'https://' + url;
       }
       return url;
+    },
+    getApplicationsCount() {
+      this.applicationsService.getApplicationsRecruitmentProcessId(this.recruitment.id).then(
+          (response) => {
+            this.applicationsCount = response.data.length > 100 ? "100+" : response.data.length;
+          }
+      ).catch(e => {
+        console.log(e);
+      });
     }
+  },
+  created() {
+    this.getApplicationsCount();
   }
-}
+};
 </script>
-
-<style>
-</style>

@@ -30,7 +30,7 @@
                 <img
                     :src="slotProps.data.applicant.profilePictureUrl"
                     alt="User profile picture"
-                    class="object-cover w-full h-full"
+                    class="object-cover w-full h-full rounded-full"
                 />
               </div>
               <div>
@@ -139,6 +139,9 @@
 <script>
 import EmailForm from "../../shared/components/email-form.component.vue";
 import EditApplicationDialog from "./edit-application-dialog.component.vue";
+import {ApplicationsService} from "../../shared/services/applications.service.js";
+import {CompaniesService} from "../../organizations/service/companies.service.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 
 export default {
   name: "all-applicants-dialog",
@@ -158,7 +161,9 @@ export default {
       emailSubject: '',
       emailContent: '',
       selectedEmails: [],
-      selectedCC: []
+      selectedCC: [],
+      companyService: new CompaniesService(),
+      applicationService: new ApplicationsService()
     }
   },
   computed: {
@@ -172,6 +177,17 @@ export default {
           application.applicant.lastname.toLowerCase().includes(filter)
       );
     }
+  },
+  created() {
+    const userStore = useUserStore();
+
+    this.companyService.getRecruitersByCompanyId(userStore.user.company.id)
+        .then(response => {
+          this.selectedCC = response.data.map(recruiter => recruiter.username);
+        })
+        .catch(e => {
+          console.log(e);
+        });
   },
   methods: {
     formatDate(date) {
@@ -190,7 +206,6 @@ export default {
       applications.forEach(application => {
         this.selectedEmails.push(application.applicant.username);
       });
-      this.emailDialog = true;
     },
     openEmailDialog(applications) {
       this.setUpApplications(applications);

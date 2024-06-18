@@ -10,16 +10,20 @@ export class CompaniesService {
         return http.get(`/${id}`);
     }
 
-    getAllCompanies() {
-        return http.get(`/`);
-    }
-
     updateCompanyById (id, data) {
         return http.put(`/update/${id}`,data);
     }
 
-    addRecruitersToCompany (companyId,recruiterId) {
-        return http.put(`${companyId}/add/recruiters/${recruiterId}`);
+    addRecruitersToCompany (companyId,recruiterEmail) {
+        return http.put(`${companyId}/add/recruiters/${recruiterEmail}`);
+    }
+
+    removeRecruiterFromCompany (companyId,recruiterEmail) {
+        return http.put(`${companyId}/delete/recruiters/${recruiterEmail}`);
+    }
+
+    getRecruitersByCompanyId(companyId) {
+        return http.get(`/${companyId}/recruiters`);
     }
 
     createCompany (companyData,recruiterId) {
