@@ -53,10 +53,12 @@
         </div>
         <pv-avatar
             shape="circle"
-            :image="user && user.profilePictureUrl" style="width: 36px; height: 36px"
-            class="hover:cursor-pointer"
+            :image="user && user.profilePictureUrl"
+            class="flex justify-center items-center w-9 h-9 hover:cursor-pointer"
             @click="this.userOptions = !this.userOptions"
-        />
+        >
+          <img :src="user && user.profilePictureUrl" alt="profile" class="object-cover w-full h-full" />
+        </pv-avatar>
       </div>
     </template>
   </pv-toolbar>

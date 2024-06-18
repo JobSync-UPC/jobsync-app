@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import JobPostCard from "./job-post-card.component.vue";
+import JobPostCard from "../../shared/components/job-post-card.component.vue";
 import {useUserStore} from "../../shared/store/user-store.store.js";
 import {ApplicationsService} from "../../shared/services/applications.service.js";
 

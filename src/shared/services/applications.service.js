@@ -18,4 +18,7 @@ export class ApplicationsService {
     applyToJob(applicantId, recruitmentProcessId) {
         return http.post(`/apply`, {applicantId, recruitmentProcessId});
     }
+    getRecruitersEmails(applicationId) {
+        return http.get(`/recruiters-emails/${applicationId}`);
+    }
 }

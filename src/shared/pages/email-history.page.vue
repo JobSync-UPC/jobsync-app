@@ -1,21 +1,35 @@
 <template>
-  <div>
+  <div class="grid gap-4">
     <div class="flex justify-between items-center">
       <h1 class="text-2xl font-bold">{{ $t('email-history') }}</h1>
       <pv-button
-          label="Compose"
-          icon="pi pi-plus"
+          :label="this.$t('email')"
+          icon="pi pi-envelope"
+          severity="contrast"
           @click="emailDialog = true"
       />
     </div>
-    <div v-if="emailHistory">
+    <div class="grid md:flex w-full gap-4">
+      <pv-button
+          class="w-full"
+          icon="pi pi-inbox"
+          :label="this.$t('received-emails')"
+          @click="displayedEmails = this.receivedEmails"
+          :severity="this.displayedEmails === this.receivedEmails ? 'primary' : 'secondary'"
+      />
+      <pv-button
+          class="w-full"
+          icon="pi pi-send"
+          :label="this.$t('sent-emails')"
+          @click="displayedEmails = this.sentEmails"
+          :severity="this.displayedEmails === this.sentEmails ? 'primary' : 'secondary'"
+      />
+    </div>
+    <div v-if="displayedEmails">
       <div class="mt-4">
         <pv-data-table
-            :data="emailHistory"
-            :columns="columns"
-            :paginator="true"
-            :rows="5"
-            :rowsPerPageOptions="[5, 10, 15]"
+            paginator :rows="10" :rowsPerPageOptions="[5, 10, 20]"
+            :value="filteredEmails"
         >
           <template #body="slotProps">
             <pv-button
@@ -33,25 +47,33 @@
         <pv-spinner />
       </div>
     </div>
+
     <pv-dialog
-        v-model:visible="emailDialog"
-        modal
-        :header="$t('compose-email')"
-        :footer="true"
-        @hide="resetEmailDialog"
+        v-model:visible="emailDialog" modal
+        :header="$t('email')"
+        :style="{ width: '50vw' }"
+        :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+        :draggable="false"
+        position="top"
     >
-      Building the email dialog...
+      <email-form
+          :emailTo="this.selectedEmails"
+          :emailCC="this.selectedCC"
+          :emailSubject="this.emailSubject"
+          :emailContent="this.emailContent"
+      />
     </pv-dialog>
   </div>
 </template>
 
 <script>
-import {useUserStore} from "../store/user-store.store.js";
 import {EmailService} from "../services/email.service.js";
+import EmailForm from "../components/email-form.component.vue";
+import {useUserStore} from "../store/user-store.store.js";
 
 export default {
   name: "email-history-page",
-  components: {},
+  components: {EmailForm},
   data(){
     return {
       emailHistory: null,
@@ -61,25 +83,30 @@ export default {
       selectedEmails: [],
       selectedCC: [],
       emailSubject: "",
-      emailContent: ""
+      emailContent: "",
+      sentEmails:null,
+      receivedEmails:null,
+      displayedEmails: null,
     }
   },
   created(){
-    this.updateEmailHistory();
+    const userStore = useUserStore(); // User id => userStore.user.id
+    this.updateReceivedEmails();
+    this.updateSentEmails();
   },
   methods: {
-    updateEmailHistory(){
-      this.emailHistory = null;
-      const userStore = useUserStore();
-      const applicantId = userStore.user.id;
+    updateReceivedEmails(){
+      // En data table agregar buscadores, filtros etc https://primevue.org/datatable/
 
-      this.emailService.sendEmail().then(
-          response => {
-            this.emailHistory = response.data;
-          }
-      ).catch(e => {
-        console.log(e);
-      });
+      // Todo
+      this.receivedEmails = []
+
+      // Default displayed emails are received
+      this.displayedEmails = this.receivedEmails;
+    },
+    updateSentEmails(){
+      // Todo
+      this.sentEmails = []
     },
     formatDate(date) {
       if (!date) return "";

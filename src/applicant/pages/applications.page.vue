@@ -61,7 +61,7 @@
               rounded
               severity="contrast"
               :disabled="slotProps.data.recruitmentProcess.enabled === false"
-              icon="pi pi-envelope"
+              :icon="slotProps.data.isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-envelope'"
               @click="showEmailDialog(slotProps.data)"
           />
         </template>
@@ -92,15 +92,15 @@
 </template>
 
 <script>
-import {useUserStore} from "../../shared/store/user-store.store.js";
-import {ApplicationsService} from "../../shared/services/applications.service.js";
-import {RecruitmentApiService} from "../../shared/services/recruitment.service.js";
+import { useUserStore } from "../../shared/store/user-store.store.js";
+import { ApplicationsService } from "../../shared/services/applications.service.js";
+import { RecruitmentApiService } from "../../shared/services/recruitment.service.js";
 import EmailForm from "../../shared/components/email-form.component.vue";
 
 export default {
   name: "jobs-posts-page",
-  components: {EmailForm},
-  data(){
+  components: { EmailForm },
+  data() {
     return {
       applications: null,
       applicationService: new ApplicationsService(),
@@ -110,21 +110,24 @@ export default {
       selectedEmails: [],
       selectedCC: [],
       emailSubject: "",
-      emailContent: ""
-    }
+      emailContent: "",
+    };
   },
-  created(){
+  created() {
     this.updateApplications();
   },
   methods: {
-    updateApplications(){
+    updateApplications() {
       this.applications = null;
       const userStore = useUserStore();
       const applicantId = userStore.user.id;
 
       this.applicationService.getApplicationsByApplicantId(applicantId).then(
           response => {
-            this.applications = response.data;
+            this.applications = response.data.map(application => ({
+              ...application,
+              isLoading: false, // Add isLoading property to each application
+            }));
           }
       ).catch(e => {
         console.log(e);
@@ -141,16 +144,22 @@ export default {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return new Date(date).toLocaleDateString('en-US', options);
     },
-    showEmailDialog(application){
+    showEmailDialog(application) {
+      application.isLoading = true; // Set loading state for the specific application
       this.selectedApplication = application;
 
       this.selectedEmails = [];
       this.selectedCC = [];
       this.emailSubject = `JobSync - ` + this.$t('application-for') + ` ${application.recruitmentProcess.jobPost.title}`;
 
-      this.emailDialog = true;
-    }
-  }
-}
-
+      this.applicationService.getRecruitersEmails(application.id).then(response => {
+        this.selectedEmails = response.data;
+        application.isLoading = false; // Reset loading state after data is fetched
+        this.emailDialog = true;
+      }).catch(() => {
+        application.isLoading = false; // Reset loading state in case of error
+      });
+    },
+  },
+};
 </script>

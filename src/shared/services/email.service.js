@@ -6,6 +6,12 @@ const http = axios.create({
 });
 
 export class EmailService {
+    getSentEmailsByUserId(userId) {
+        return http.get(`sent/${userId}`);
+    }
+    getReceivedEmailsByUserId(userId) {
+        return http.get(`received/${userId}`);
+    }
     sendEmail(email) {
         return http.post('send', email);
     }

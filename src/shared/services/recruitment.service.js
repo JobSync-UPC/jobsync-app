@@ -22,4 +22,10 @@ export class RecruitmentApiService {
   getAllRecruitmentProcessesWithActiveJobPost() {
     return http.get(`/active`);
   }
+  activateAutomaticEmails(recruitmentProcessId) {
+    return http.put(`/active-automatic-emails/${recruitmentProcessId}`);
+  }
+  deactivateAutomaticEmails(recruitmentProcessId) {
+    return http.put(`/deactivate-automatic-emails/${recruitmentProcessId}`);
+  }
 }

@@ -13,7 +13,7 @@
           <img
               :src="application.applicant.profilePictureUrl"
               alt="User profile picture"
-              class="object-cover w-full h-full"
+              class="object-cover w-full h-full rounded-full"
           />
         </div>
         <div>
@@ -185,6 +185,17 @@ export default {
     updateApplicationPhase() {
       this.applicationsService.updateApplicationPhase(this.application.id, this.selectedNewPhase.value)
           .then(() => {
+            // TODO: Send automatic emails if recruitmentProcess.automaticEmails is true
+
+            if (this.application.recruitmentProcess.automaticEmails) {
+              // TODO: Send email
+
+
+
+              // Todo: Add toast if email is sent or not
+
+            }
+
             this.$emit('edit-application-phase');
             this.confirmEditDialog = false;
           })

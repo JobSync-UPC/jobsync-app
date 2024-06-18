@@ -14,7 +14,7 @@
     <div class="grid md:grid-cols-2 gap-4 py-4">
       <div v-for="recruitmentProcess in displayedRecruitmentProcesses" :key="recruitmentProcess.id">
         <router-link :to="`recruitment/${recruitmentProcess.id}/dashboard`">
-          <recruitment-card :recruitment="recruitmentProcess" />
+          <job-post-card :recruitment="recruitmentProcess" />
         </router-link>
       </div>
     </div>
@@ -42,11 +42,11 @@
 import CreateRecruitmentProcess from "../components/create-recruitment-process.component.vue";
 import { useUserStore } from "../../shared/store/user-store.store.js";
 import { RecruitmentApiService } from "../../shared/services/recruitment.service.js";
-import RecruitmentCard from "../components/recruitment-card.component.vue";
+import JobPostCard from "../../shared/components/job-post-card.component.vue";
 
 export default {
   name: "RecruitmentsListPage",
-  components: { RecruitmentCard, CreateRecruitmentProcess },
+  components: {JobPostCard, CreateRecruitmentProcess },
   data() {
     return {
       recruitmentProcesses: null,
