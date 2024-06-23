@@ -1,4 +1,6 @@
 {
+  "email-success": "Email sent successfully",
+  "email-error": "There was an error sending the email",
   "received-emails": "Received emails",
   "sent-emails": "Sent emails",
   "search-email": "Buscar email",
