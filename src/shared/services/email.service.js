@@ -6,13 +6,19 @@ const http = axios.create({
 });
 
 export class EmailService {
-    getSentEmailsByUserId(userId) {
-        return http.get(`sent/${userId}`);
+    getSentEmailsByUserId(email) {
+        return http.get(`sent-emails/`, {params: {email: email}});
     }
-    getReceivedEmailsByUserId(userId) {
-        return http.get(`received/${userId}`);
+    getReceivedEmailsByUserId(email) {
+        return http.get(`received-emails/`, {params: {email: email}});
     }
-    sendEmail(email) {
-        return http.post('send', email);
+    sendEmail(to, cc, sender, subject, body) {
+        return http.post('send-email', {
+            to: to, // List<String>
+            cc: cc, // List<String>
+            sender: sender, // String
+            subject: subject, // String
+            body: body // String
+        });
     }
 }
