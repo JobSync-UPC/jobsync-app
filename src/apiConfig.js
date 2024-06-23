@@ -1,5 +1,5 @@
 // This file contains the base URL for the API endpoints
-const baseUrl = 'http://localhost:8080/';
+const baseUrl = 'http://34.176.95.40:8080/';
 
 export const authBaseUrl = `${baseUrl}api/v1/auth`;
 export const usersBaseUrl = `${baseUrl}api/v1/users`;
@@ -11,4 +11,4 @@ export const recruitmentProcessesBaseUrl = `${baseUrl}api/v1/recruitment-process
 export const applicationsUrl = `${baseUrl}api/v1/applications`;
 export const phasesBasUrl = `${baseUrl}api/v1/recruitment-phases`;
 export const cloudinaryUrl = `${baseUrl}cloudinary/api/images/upload`;
-export const emailUrl = `${baseUrl}/email/`;
+export const emailUrl = `${baseUrl}/email/api/v1/`;
