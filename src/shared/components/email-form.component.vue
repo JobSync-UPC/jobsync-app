@@ -68,7 +68,7 @@
       />
     </div>
 
-    <div class="w-full">
+<!--    <div class="w-full">
       <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
         {{ $t('attachments') }}
       </label>
@@ -79,7 +79,7 @@
           :maxFileSize="1000000"
           @select="onFileSelect"
       />
-    </div>
+    </div>-->
 
     <pv-button
         iconPos="right"
@@ -91,6 +91,9 @@
 </template>
 
 <script>
+import {EmailService} from "../services/email.service.js";
+import {useUserStore} from "../store/user-store.store.js";
+
 export default {
   name: "EmailForm",
   props: {
@@ -120,6 +123,7 @@ export default {
       selectedFiles: [],
       newEmailSubject: '',
       newEmailContent: '',
+      emailService: new EmailService(),
     }
   },
   created() {
@@ -213,11 +217,40 @@ export default {
       this.selectedFiles = [...this.selectedFiles, ...event.files];
     },
     sendEmail() {
-      console.log('Email to:', this.emailTo);
-      console.log('CC:', this.emailCC);
-      console.log('Subject:', this.newEmailSubject);
-      console.log('Content:', this.newEmailContent);
-      console.log('Attachments:', this.selectedFiles);
+      const userStore = useUserStore();
+      const sender = userStore.user.email;
+
+      if (sender === '' || sender === null) {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'JobSync',
+          detail: this.$t('email-error')
+        });
+      }
+      else {
+        this.emailService.sendEmail({
+          to: this.emailTo,
+          cc: this.emailCC,
+          sender: sender,
+          subject: this.newEmailSubject,
+          body: this.newEmailContent,
+        }).then(() => {
+          this.$toast.add({
+            severity: 'success',
+            summary: 'JobSync',
+            detail: this.$t('email-success'),
+            life: 2000
+          });
+        }).catch((e) => {
+          this.$toast.add({
+            severity: 'error',
+            summary: 'JobSync',
+            detail: this.$t('email-error') + ' ' + e,
+            life: 2000
+          });
+        });
+        // console.log('Attachments:', this.selectedFiles);
+      }
     }
   }
 }

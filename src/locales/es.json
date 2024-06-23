@@ -1,4 +1,6 @@
 {
+  "email-success": "Email enviado con éxito",
+  "email-error": "Error al enviar email",
   "received-emails": "Correos recibidos",
   "sent-emails": "Correos entregados",
   "search-email": "Buscar email",
