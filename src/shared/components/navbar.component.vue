@@ -89,28 +89,38 @@
                  @click="this.$router.push('/applications'); this.visibleMobileBar = false"
       />
       <pv-button :label="$t('navbar.profile')" text plain
-                 @click="this.$router.push('/'); this.visibleMobileBar = false"
+                 @click="this.$router.push('/manage-profile'); this.visibleMobileBar = false"
+      />
+      <pv-button :label="$t('email')" text plain
+                 @click="this.$router.push('/email')"
+                 class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
       />
     </div>
     <div v-else-if="user && user.role === 'ROLE_RECRUITER'" class="grid">
       <div v-if="user.company">
-        <pv-button :label="$t('navbar.recruitments')" text plain
-                   @click="this.$router.push('/recruitments'); this.visibleMobileBar = false"
-        />
-        <pv-button :label="$t('navbar.company')" text plain
-                   @click="this.$router.push('/company-profile'); this.visibleMobileBar = false"
-        />
+        <div class="grid">
+          <pv-button :label="$t('navbar.recruitments')" text plain
+                     @click="this.$router.push('/recruitments'); this.visibleMobileBar = false"
+          />
+          <pv-button :label="$t('navbar.company')" text plain
+                     @click="this.$router.push('/company-profile'); this.visibleMobileBar = false"
+          />
+          <pv-button :label="$t('email')" text plain
+                     @click="this.$router.push('/email')"
+                     class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
+          />
+        </div>
       </div>
       <div v-else>
         <pv-button :label="$t('navbar.create-organization')" text plain
                    @click="this.$router.push('/create-company'); this.visibleMobileBar = false"
         />
+        <pv-button :label="$t('email')" text plain
+                   @click="this.$router.push('/email')"
+                   class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
+        />
       </div>
     </div>
-    <pv-button :label="$t('email')" text plain
-               @click="this.$router.push('/email')"
-               class="mb-2 md:mb-0 md:mr-2 lg:mr-4"
-    />
   </pv-dialog>
 
 </template>
