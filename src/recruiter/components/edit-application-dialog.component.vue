@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import {ApplicationsService} from "../../shared/services/applications.service.js";
+import { ApplicationsService } from "../../shared/services/applications.service.js";
+import { EmailService } from "../../shared/services/email.service.js";
 
 export default {
   name: "edit-application-dialog",
@@ -131,7 +132,9 @@ export default {
         label: ''
       },
       confirmEditDialog: false,
-      applicationsService: new ApplicationsService()
+      applicationsService: new ApplicationsService(),
+      emailService: new EmailService(),
+
     }
   },
   mounted() {
@@ -170,38 +173,48 @@ export default {
     },
     formatDate(date) {
       if (!date) return "";
-      const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return new Date(date).toLocaleDateString('en-US', options);
     },
     editApplicationCurrentPhase() {
       if (!this.isNewPhaseSelected) return;
 
-      this.application.recruitmentProcess.recruitmentPhases
-          .map(phase => phase.id)
-          .includes(this.selectedNewPhase.value)
-          ? this.updateApplicationPhase()
-          : this.$toast.add({severity: 'error', summary: 'Error', detail: this.$t('phase-not-in-process'), life: 2000});
+      if (this.application.recruitmentProcess.recruitmentPhases.map(phase => phase.id).includes(this.selectedNewPhase.value)) {
+        this.updateApplicationPhase();
+      } else {
+        this.$toast.add({ severity: 'error', summary: 'Error', detail: this.$t('phase-not-in-process'), life: 2000 });
+      }
     },
     updateApplicationPhase() {
       this.applicationsService.updateApplicationPhase(this.application.id, this.selectedNewPhase.value)
-          .then(() => {
-            // TODO: Send automatic emails if recruitmentProcess.automaticEmails is true
+        .then(() => {
+          this.$emit('edit-application-phase');
+          this.confirmEditDialog = false;
 
-            if (this.application.recruitmentProcess.automaticEmails) {
-              // TODO: Send email
+          
+          if (this.application.recruitmentProcess.automaticEmails) {
+            this.sendEmailNotification();
+          }
+        })
+        .catch((error) => {
+          this.$toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 2000 });
+        });
+    },
+    sendEmailNotification() {
+      const to = [this.application.applicant.username];
+      const cc = [];
+      const sender = "nose@gmail.com";
 
+      const subject = 'Cambio en la fase de reclutamiento';
+      const body = `Hola ${this.application.applicant.firstname},\n\nLa fase de tu proceso de reclutamiento ha cambiado a ${this.selectedNewPhaseLabel}.\n\nSaludos,\nEl equipo de Reclutamiento`;
 
-
-              // Todo: Add toast if email is sent or not
-
-            }
-
-            this.$emit('edit-application-phase');
-            this.confirmEditDialog = false;
-          })
-          .catch((error) => {
-            this.$toast.add({severity: 'error', summary: 'Error', detail: error.message, life: 2000});
-          });
+      this.emailService.sendEmail(to, cc, sender, subject, body)
+        .then(() => {
+          this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Correo enviado correctamente', life: 2000 });
+        })
+        .catch((error) => {
+          this.$toast.add({ severity: 'error', summary: 'Error', detail: `No se pudo enviar el correo: ${error.message}`, life: 2000 });
+        });
     }
   }
 }
