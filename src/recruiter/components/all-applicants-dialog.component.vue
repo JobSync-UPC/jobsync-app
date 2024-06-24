@@ -214,7 +214,7 @@ export default {
     },
     openEditDialog(applications) {
       this.setUpApplications(applications);
-      this.selectedApplication = application;
+      this.selectedApplication = applications;
       this.editDialog = true;
     },
     editApplicationPhase(application) {
