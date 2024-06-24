@@ -130,7 +130,7 @@
              position="top"
              class="w-1/2">
     <edit-application-dialog
-        :application="selectedApplications[0]"
+        :application="selectedApplication"
         @edit-application-phase="editApplicationPhase"
     />
   </pv-dialog>
@@ -164,6 +164,7 @@ export default {
       selectedCC: [],
       companyService: new CompaniesService(),
       applicationService: new ApplicationsService(),
+      selectedApplication: null,
     }
   },
   computed: {
@@ -213,6 +214,7 @@ export default {
     },
     openEditDialog(applications) {
       this.setUpApplications(applications);
+      this.selectedApplication = application;
       this.editDialog = true;
     },
     editApplicationPhase(application) {
