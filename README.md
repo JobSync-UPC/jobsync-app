@@ -43,7 +43,7 @@
 
 <div align="center">
   <a href="https://github.com/Testigos-de-Vue/jobsync-app" target="_blank">
-    <img src="https://i.imgur.com/qZMwEAH.png" alt="Preview Web Aplication" style="height:auto; width:1280px;">
+    <img src="https://i.imgur.com/YYlJbE1.png" alt="Preview Web Aplication" style="height:auto; width:1280px;">
   </a>
 </div>
 

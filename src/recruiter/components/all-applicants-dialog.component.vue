@@ -130,7 +130,7 @@
              position="top"
              class="w-1/2">
     <edit-application-dialog
-        :application="applications[0]"
+        :application="selectedApplications[0]"
         @edit-application-phase="editApplicationPhase"
     />
   </pv-dialog>
@@ -163,7 +163,7 @@ export default {
       selectedEmails: [],
       selectedCC: [],
       companyService: new CompaniesService(),
-      applicationService: new ApplicationsService()
+      applicationService: new ApplicationsService(),
     }
   },
   computed: {
