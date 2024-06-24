@@ -9,6 +9,7 @@
             severity="secondary"
             size="small"
             rounded
+            :disabled="isDisabled"
             @click="removeToEmail(index)"
         />
       </div>
@@ -17,6 +18,7 @@
           v-model="this.toInput"
           type="email"
           :placeholder="$t('to')"
+          :disabled="isDisabled"
           @input="handleToInput"
           @keydown="handleToKeydown"
       />
@@ -31,6 +33,7 @@
             severity="secondary"
             size="small"
             rounded
+            :disabled="isDisabled"
             @click="removeCCEmail(index)"
         />
       </div>
@@ -40,6 +43,7 @@
           type="text"
           :placeholder="$t('cc')"
           @input="handleCCInput"
+          :disabled="isDisabled"
           @keydown="handleCCKeydown"
       />
       <p class="text-red-700 text-xs">{{ this.infoCCMessage }}</p>
@@ -52,6 +56,7 @@
       <pv-input
           class="w-full"
           v-model="this.newEmailSubject"
+          :disabled="isDisabled"
           type="text"
       />
     </div>
@@ -60,6 +65,7 @@
         {{ $t('content') }}
       </label>
       <pv-textarea
+          :disabled="isDisabled"
           class="w-full"
           v-model="this.newEmailContent"
           type="text"
@@ -68,25 +74,28 @@
       />
     </div>
 
-<!--    <div class="w-full">
-      <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
-        {{ $t('attachments') }}
-      </label>
-      <pv-file-upload
-          :auto="true"
-          multiple
-          chooseLabel="Choose"
-          :maxFileSize="1000000"
-          @select="onFileSelect"
+    <!--    <div class="w-full">
+          <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="subject">
+            {{ $t('attachments') }}
+          </label>
+          <pv-file-upload
+              :auto="true"
+              multiple
+              chooseLabel="Choose"
+              :maxFileSize="1000000"
+              @select="onFileSelect"
+          />
+        </div>-->
+    <div v-if="!isDisabled">
+      <pv-button
+          :disabled="isLoading"
+          class="flex w-full"
+          iconPos="right"
+          :label="this.isLoading ? $t('loading'):$t('send')"
+          icon="pi pi-envelope"
+          @click="sendEmail"
       />
-    </div>-->
-
-    <pv-button
-        iconPos="right"
-        :label="$t('send')"
-        icon="pi pi-envelope"
-        @click="sendEmail"
-    />
+    </div>
   </div>
 </template>
 
@@ -99,7 +108,7 @@ export default {
   props: {
     emailTo: {
       type: Array,
-      required: true
+      default: () => []
     },
     emailCC: {
       type: Array,
@@ -110,6 +119,10 @@ export default {
     },
     emailContent: {
       type: String,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -124,6 +137,7 @@ export default {
       newEmailSubject: '',
       newEmailContent: '',
       emailService: new EmailService(),
+      isLoading: false
     }
   },
   created() {
@@ -217,8 +231,14 @@ export default {
       this.selectedFiles = [...this.selectedFiles, ...event.files];
     },
     sendEmail() {
+      this.isLoading = true;
       const userStore = useUserStore();
       const sender = userStore.user.email;
+
+      const to = this.emailTo;
+      const cc = this.emailCC;
+      const subject = this.newEmailSubject;
+      const body = this.newEmailContent;
 
       if (sender === '' || sender === null) {
         this.$toast.add({
@@ -226,31 +246,41 @@ export default {
           summary: 'JobSync',
           detail: this.$t('email-error')
         });
+        this.isLoading = false;
+        return;
       }
-      else {
-        this.emailService.sendEmail({
-          to: this.emailTo,
-          cc: this.emailCC,
-          sender: sender,
-          subject: this.newEmailSubject,
-          body: this.newEmailContent,
-        }).then(() => {
-          this.$toast.add({
-            severity: 'success',
-            summary: 'JobSync',
-            detail: this.$t('email-success'),
-            life: 2000
-          });
-        }).catch((e) => {
-          this.$toast.add({
-            severity: 'error',
-            summary: 'JobSync',
-            detail: this.$t('email-error') + ' ' + e,
-            life: 2000
-          });
+
+      if (to.length === 0) {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'JobSync',
+          detail: this.$t('email-to-error')
         });
-        // console.log('Attachments:', this.selectedFiles);
+        this.isLoading = false;
+        return;
       }
+
+      this.emailService.sendEmail(to,cc,sender,subject,body)
+          .then(() => {
+            this.$toast.add({
+              severity: 'success',
+              summary: 'JobSync',
+              detail: this.$t('email-success'),
+              life: 2000
+            });
+            this.emailTo = [];
+            this.emailCC = [];
+            this.newEmailSubject = '';
+            this.newEmailContent = '';
+            this.isLoading = false;
+          }).catch((e) => {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'JobSync',
+          detail: this.$t('email-error') + ' ' + e,
+          life: 2000
+        });
+      });
     }
   }
 }
