@@ -26,7 +26,7 @@
       />
     </div>
 
-    <div v-if="displayedEmails === 'sent' ? this.sentEmails : this.receivedEmails">
+    <div v-if="displayedEmails === 'sent' ? this.sentEmails : this.receivedEmails" class="overflow-x-auto">
       <pv-data-table
           :value="displayedEmails === 'sent' ? this.sentEmails : this.receivedEmails" paginator :rows="10"
           :rowsPerPageOptions="[5, 10, 20]"
