@@ -14,33 +14,38 @@
           class="w-full"
           icon="pi pi-inbox"
           :label="this.$t('received-emails')"
-          @click="displayedEmails = this.receivedEmails"
-          :severity="this.displayedEmails === this.receivedEmails ? 'primary' : 'secondary'"
+          @click="displayedEmails = 'received'"
+          :severity="this.displayedEmails === 'received' ? 'primary' : 'secondary'"
       />
       <pv-button
           class="w-full"
           icon="pi pi-send"
           :label="this.$t('sent-emails')"
-          @click="displayedEmails = this.sentEmails"
-          :severity="this.displayedEmails === this.sentEmails ? 'primary' : 'secondary'"
+          @click="displayedEmails = 'sent'"
+          :severity="this.displayedEmails === 'sent' ? 'primary' : 'secondary'"
       />
     </div>
-    <div v-if="displayedEmails">
-      <div class="mt-4">
-        <pv-data-table
-            paginator :rows="10" :rowsPerPageOptions="[5, 10, 20]"
-            :value="filteredEmails"
-        >
+
+    <div v-if="displayedEmails === 'sent' ? this.sentEmails : this.receivedEmails">
+      <pv-data-table
+          :value="displayedEmails === 'sent' ? this.sentEmails : this.receivedEmails" paginator :rows="10"
+          :rowsPerPageOptions="[5, 10, 20]"
+          @row-click="onRowClick"
+      >
+        <pv-column field="subject" :header="this.$t('subject')"></pv-column>
+        <pv-column field="sender" :header="this.$t('from')"></pv-column>
+        <pv-column :header="this.$t('to')">
           <template #body="slotProps">
-            <pv-button
-                rounded
-                severity="contrast"
-                icon="pi pi-envelope"
-                @click="showEmailDialog(slotProps.data)"
-            />
+            <p>{{ slotProps.data.to.join(', ') }}</p>
           </template>
-        </pv-data-table>
-      </div>
+        </pv-column>
+        <pv-column header="CC">
+          <template #body="slotProps">
+            <p v-if="slotProps.data.cc.length">{{ slotProps.data.cc.join(', ') }}</p>
+            <p v-else></p>
+          </template>
+        </pv-column>
+      </pv-data-table>
     </div>
     <div v-else>
       <div class="flex items-center justify-center">
@@ -61,6 +66,22 @@
           :emailCC="this.selectedCC"
           :emailSubject="this.emailSubject"
           :emailContent="this.emailContent"
+      />
+    </pv-dialog>
+
+    <pv-dialog
+        v-model:visible="emailDetailsDialog" modal
+        :header="$t('email')"
+        :style="{ width: '50vw' }"
+        :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
+        :draggable="false"
+        position="top">
+      <email-form
+          :isDisabled="true"
+          :emailTo="this.selectedEmailDetails.to"
+          :emailCC="this.selectedEmailDetails.cc"
+          :emailSubject="this.selectedEmailDetails.subject"
+          :emailContent="this.selectedEmailDetails.body"
       />
     </pv-dialog>
   </div>
@@ -84,29 +105,49 @@ export default {
       selectedCC: [],
       emailSubject: "",
       emailContent: "",
-      sentEmails:null,
-      receivedEmails:null,
+      sentEmails:[],
+      receivedEmails:[],
       displayedEmails: null,
+      emailDetailsDialog: false,
+      selectedEmailDetails: null
     }
   },
   created(){
-    const userStore = useUserStore(); // User id => userStore.user.id
+    this.displayedEmails = 'received'
     this.updateReceivedEmails();
     this.updateSentEmails();
   },
   methods: {
     updateReceivedEmails(){
-      // En data table agregar buscadores, filtros etc https://primevue.org/datatable/
+      const userStore = useUserStore();
+      const userEmail = userStore.user.email;
 
-      // Todo
-      this.receivedEmails = []
-
-      // Default displayed emails are received
-      this.displayedEmails = this.receivedEmails;
+      this.emailService.getReceivedEmailsByEmail(userEmail)
+          .then(response => {
+            if (response.data.length > 0) {
+              this.receivedEmails = response.data;
+            }
+          })
+          .catch(error => {
+            this.receivedEmails = [];
+          });
     },
     updateSentEmails(){
-      // Todo
-      this.sentEmails = []
+      const userStore = useUserStore(); // User id => userStore.user.id
+      const userEmail = userStore.user.email;
+      this.emailService.getSentEmailsByEmail(userEmail)
+          .then(response => {
+            if (response.data.length > 0) {
+              this.sentEmails = response.data;
+            }
+          })
+          .catch(error => {
+            this.sentEmails = [];
+          });
+    },
+    onRowClick(event) {
+      this.selectedEmailDetails = event.data;
+      this.emailDetailsDialog = true;
     },
     formatDate(date) {
       if (!date) return "";

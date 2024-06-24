@@ -1,4 +1,5 @@
 {
+  "email-to-error": "Please enter valid email addresses",
   "email-success": "Email sent successfully",
   "email-error": "There was an error sending the email",
   "received-emails": "Received emails",
@@ -62,6 +63,7 @@
   "automation": "Automation",
   "edit-candidate-dialog": "You are now editing",
   "to": "To",
+  "from": "From",
   "cc": "CC",
   "email-placeholder": "Enter email",
   "subject": "Subject",

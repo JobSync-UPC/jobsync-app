@@ -115,6 +115,7 @@
 <script>
 import { ApplicationsService } from "../../shared/services/applications.service.js";
 import { EmailService } from "../../shared/services/email.service.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 
 export default {
   name: "edit-application-dialog",
@@ -191,7 +192,6 @@ export default {
           this.$emit('edit-application-phase');
           this.confirmEditDialog = false;
 
-          
           if (this.application.recruitmentProcess.automaticEmails) {
             this.sendEmailNotification();
           }
@@ -201,9 +201,12 @@ export default {
         });
     },
     sendEmailNotification() {
+      const userStore = useUserStore(); // User id => userStore.user.id
+      const userEmail = userStore.user.email;
+
       const to = [this.application.applicant.username];
       const cc = [];
-      const sender = "nose@gmail.com";
+      const sender = userEmail;
 
       const subject = 'Cambio en la fase de reclutamiento';
       const body = `Hola ${this.application.applicant.firstname},\n\nLa fase de tu proceso de reclutamiento ha cambiado a ${this.selectedNewPhaseLabel}.\n\nSaludos,\nEl equipo de Reclutamiento`;

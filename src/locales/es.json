@@ -1,4 +1,5 @@
 {
+  "email-to-error": "El email no es válido",
   "email-success": "Email enviado con éxito",
   "email-error": "Error al enviar email",
   "received-emails": "Correos recibidos",
@@ -62,6 +63,7 @@
   "to": "Para",
   "email-placeholder": "Enter para agregar",
   "cc": "CC",
+  "from": "De",
   "subject": "Asunto",
   "content": "Contenido",
   "attachments": "Adjuntos",
