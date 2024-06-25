@@ -65,27 +65,36 @@
                 type="email"
             />
           </div>
-          <div class="grid grid-cols-2 items-end gap-4">
-            <div>
-              <label for="password">{{ $t('auth.password') }}</label>
-              <pv-input
-                  required
-                  id="password"
-                  class="w-full"
-                  v-model="password"
-                  type="password"
-                  placeholder="••••••••••••"
-              />
+          <div class="flex flex-cols place-items-end gap-2">
+            <div class="grid grid-cols-2 items-end gap-4">
+              <div>
+                <label for="password">{{ $t('auth.password') }}</label>
+                <pv-input
+                    required
+                    id="password"
+                    class="w-full"
+                    v-model="password"
+                    :type="this.isPassword"
+                    placeholder="••••••••••••"
+                />
+              </div>
+              <div>
+                <label for="confirm-password">{{ $t('auth.confirm-password') }}</label>
+                <pv-input
+                    required
+                    id="confirm-password"
+                    class="w-full"
+                    v-model="confirmPassword"
+                    :type="this.isPassword"
+                    placeholder="••••••••••••"
+                />
+              </div>
             </div>
             <div>
-              <label for="confirm-password">{{ $t('auth.confirm-password') }}</label>
-              <pv-input
-                  required
-                  id="confirm-password"
-                  class="w-full"
-                  v-model="confirmPassword"
-                  type="password"
-                  placeholder="••••••••••••"
+              <pv-button
+                  :icon="this.isPassword === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"
+                  severity="secondary"
+                  @click="switchVisiblePassword"
               />
             </div>
           </div>
@@ -127,6 +136,7 @@ export default {
   name: "register-form",
   data() {
     return {
+      isPassword: 'password',
       firstName: '',
       lastName: '',
       email: '',
@@ -161,6 +171,9 @@ export default {
     this.loadCountries();
   },
   methods: {
+    switchVisiblePassword() {
+      this.isPassword = this.isPassword === 'password' ? '' : 'password';
+    },
     loadCountries() {
       this.countriesApi.getCountries()
         .then(response => {
