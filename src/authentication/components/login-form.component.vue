@@ -91,7 +91,6 @@ export default {
         .catch(err => this.$toast.add({
           severity: "warn",
           detail: "Invalid email or password",
-          summary: err.response,
           life: 2000
         }))
         .finally(() =>

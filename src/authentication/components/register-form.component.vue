@@ -132,6 +132,7 @@
 <script>
 import {CountriesApiService} from "../../shared/services/countries.service.js";
 import {AuthApiService} from "../services/authApiService.js";
+import {useUserStore} from "../../shared/store/user-store.store.js";
 export default {
   name: "register-form",
   data() {
@@ -214,12 +215,36 @@ export default {
             this.$toast.add({
               severity: "success",
               summary: "Success",
-              detail: `Redirecting to login...`,
+              detail: `Account created, logging in..`,
               life: 2000
             });
-            setTimeout(() => {
-              this.$router.push("/login");
-            }, 2000);
+
+            this.authApi.signIn(this.email, this.password)
+                .then(res => {
+                  const userStore = useUserStore();
+
+                  if (res.data.token) {
+                    localStorage.setItem('auth', JSON.stringify(res.data));
+                  }
+                  userStore.login(res.data);
+
+                  this.$toast.add({
+                    severity: "success",
+                    summary: "JobSync",
+                    detail: "Logged in",
+                    life: 2000
+                  });
+
+                  this.$router.push("/")
+                })
+                .catch(err => this.$toast.add({
+                  severity: "warn",
+                  detail: "Invalid email or password",
+                  life: 2000
+                }))
+                .finally(() =>
+                    this.isLoggingIn = false
+                );
           })
           .catch(err => {
             this.$toast.add({
