@@ -17,7 +17,19 @@
         <label class="block tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2" for="password">
           {{ $t('auth.password') }}
         </label>
-        <pv-input id="password" class="w-full" v-model="password" type="password" placeholder="••••••••••••" required />
+        <div class="flex w-full">
+          <pv-input id="password"
+                    class="w-full"
+                    v-model="password"
+                    :type="this.isPassword"
+                    placeholder="••••••••••••" required
+          />
+          <pv-button
+              :icon="this.isPassword === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"
+              severity="secondary"
+              @click="switchVisiblePassword"
+          />
+        </div>
       </div>
       <pv-button type="submit"
                  :label="isLoggingIn ? $t('auth.logging-in') : $t('auth.login')"
@@ -46,10 +58,14 @@ export default {
       email: '',
       password: '',
       authApi: new AuthApiService(),
-      isLoggingIn: false
+      isLoggingIn: false,
+      isPassword: 'password'
     }
   },
   methods: {
+    switchVisiblePassword() {
+      this.isPassword = this.isPassword === 'password' ? '' : 'password';
+    },
     login(event) {
       event.preventDefault();
       const userStore = useUserStore();
