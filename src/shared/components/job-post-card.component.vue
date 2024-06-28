@@ -80,13 +80,13 @@ export default {
       return url;
     },
     getApplicationsCount() {
-      this.applicationsService.getApplicationsRecruitmentProcessId(this.recruitment.id).then(
-          (response) => {
+      this.applicationsService.getApplicationsRecruitmentProcessId(this.recruitment.id)
+          .then((response) => {
             this.applicationsCount = response.data.length > 100 ? "100+" : response.data.length;
           }
-      ).catch(e => {
-        console.log(e);
-      });
+          ).catch(e => {
+            console.log(e);
+          });
     }
   },
   created() {

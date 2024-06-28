@@ -268,11 +268,11 @@ export default {
               detail: this.$t('email-success'),
               life: 2000
             });
-            this.emailTo = [];
-            this.emailCC = [];
-            this.newEmailSubject = '';
-            this.newEmailContent = '';
-            this.isLoading = false;
+            // this.emailTo = [];
+            // this.emailCC = [];
+            // this.newEmailSubject = '';
+            // this.newEmailContent = '';
+            // this.isLoading = false;
           }).catch((e) => {
         this.$toast.add({
           severity: 'error',
@@ -280,6 +280,7 @@ export default {
           detail: this.$t('email-error') + ' ' + e,
           life: 2000
         });
+        this.isLoading = false;
       });
     }
   }
